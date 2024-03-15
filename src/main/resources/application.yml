@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: kr.co.trito.domain.PrefixPhysicalNamingStrategy
+
+server:
+  port: 8080
