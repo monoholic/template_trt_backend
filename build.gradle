@@ -31,6 +31,9 @@ dependencies {
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // oracle
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc8:19.3.0.0'
+
     // lombok
     implementation "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"

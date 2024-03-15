@@ -1,19 +1,17 @@
 version: "3"
 services:
   db:
-    image: mysql:8.0.31
-    container_name: mysql
+    image: jaspeen/oracle-xe-11g
+    container_name: oracle-xe-18c
     restart: unless-stopped
-    tty: true
     ports:
-      - "3306:3306"
+      - 1521:1521
+      - 5500:5500
     environment:
-      MYSQL_HOST: localhost
-      MYSQL_ROOT_PASSWORD: 12345678 # 초기 mysql root 비밀번호
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      - ORACLE_PWD=1234
+      - ORACLE_CHARACTERSET=AL32UTF8
     volumes:
-      - mysql-data:/var/lib/mysql
+      - oracle-data:/opt/oracle/oradata
 
 volumes:
-  mysql-data:
+  oracle-data:

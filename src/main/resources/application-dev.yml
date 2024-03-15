@@ -4,10 +4,10 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:mysql://localhost:3306/TTADMIN
-    username: root
-    password: 12345678
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: TTADMIN
+    password: 1234
+    driver-class-name: oracle.jdbc.driver.OracleDriver
 
   h2:
     console:
