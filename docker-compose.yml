@@ -1,0 +1,14 @@
+version: "3"
+services:
+  db:
+    image: mysql:8.0.31
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_ROOT_PASSWORD: 12345678 # 초기 mysql root 비밀번호
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
