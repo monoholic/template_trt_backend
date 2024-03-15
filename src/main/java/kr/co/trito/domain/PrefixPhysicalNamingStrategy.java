@@ -8,7 +8,7 @@ import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
  * Table 명칭 prefix 설정
  */
 public class PrefixPhysicalNamingStrategy implements PhysicalNamingStrategy {
-    private String prefix = "TBSY_";
+    private final String prefix = "TBSY_";
 
     @Override
     public Identifier toPhysicalCatalogName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
