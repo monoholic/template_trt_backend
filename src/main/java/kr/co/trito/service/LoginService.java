@@ -1,19 +1,20 @@
 package kr.co.trito.service;
 
-import kr.co.trito.domain.UserInfo;
 import kr.co.trito.domain.repository.UserInfoRepository;
 import kr.co.trito.dto.request.LoginDto;
+import kr.co.trito.dto.response.LoginUserInfoDto;
+import kr.co.trito.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService {
     private final UserInfoRepository userInfoRepository;
 
-    public UserInfo getLogin(LoginDto loginDto) {
-        return userInfoRepository.findById(1L).orElse(new UserInfo());
+    public LoginUserInfoDto getLogin(LoginDto loginDto) {
+        String userId = loginDto.userId();
+        String encPasswd   = SecurityUtil.makeSHA256(loginDto.passwd());
+        return userInfoRepository.getLogin(userId, encPasswd);
     }
 }

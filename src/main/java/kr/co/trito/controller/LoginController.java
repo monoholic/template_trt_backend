@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.co.trito.domain.response.TritoResponse;
 import kr.co.trito.dto.request.LoginDto;
+import kr.co.trito.dto.response.LoginUserInfoDto;
 import kr.co.trito.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
     private final LoginService loginService;
 
-    @PostMapping("/login")
+    @PostMapping("/sysLogin")
     public ResponseEntity<TritoResponse<?>> login(
         @Valid @RequestBody LoginDto loginDto,
         HttpSession session
     ){
-        loginService.getLogin(loginDto);
-        return ResponseEntity.ok(new TritoResponse<>("1"));
-
+        LoginUserInfoDto login = loginService.getLogin(loginDto);
 
 //        session.setAttribute("LoginUser", );
-//        return ResponseEntity.ok(new BfResponse<>(memberService.login(memberLoginDto)));
+        return ResponseEntity.ok(new TritoResponse<>(login));
     }
 
 }

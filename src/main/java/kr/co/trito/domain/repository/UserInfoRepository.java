@@ -1,6 +1,7 @@
 package kr.co.trito.domain.repository;
 
 import kr.co.trito.domain.UserInfo;
+import kr.co.trito.dto.response.LoginUserInfoDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,5 +17,5 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
           AND B.SAWON_NO = A.SAWON_NO
           AND B.OT_DATE IS NULL
     """, nativeQuery = true)
-    UserInfo getLogin(@Param("userId") String userId, @Param("encPasswd") String encPasswd);
+    LoginUserInfoDto getLogin(@Param("userId") String userId, @Param("encPasswd") String encPasswd);
 }
