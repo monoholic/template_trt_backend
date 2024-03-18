@@ -4,18 +4,12 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: TTADMIN
-    password: 1234
+    url: jdbc:oracle:thin:@www.trito.co.kr:1521:TRITODB
+    username: home_dev
+    password: trito114
     driver-class-name: oracle.jdbc.driver.OracleDriver
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
   jpa:
-    # database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: validate
 
@@ -23,6 +17,7 @@ spring:
       hibernate:
         show_sql: ture
         format_sql: true
+
   flyway:
     baseline-on-migrate: true   # 기존데이터에 마이그레이션
     out-of-order: true          # 버전 순서와 상관없이 마이그레이션
