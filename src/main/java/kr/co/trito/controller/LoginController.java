@@ -23,7 +23,7 @@ public class LoginController {
         @Valid @RequestBody LoginDto loginDto,
         HttpSession session
     ){
-        LoginUserInfoDto login = loginService.getLogin(loginDto).get(0);
+        LoginUserInfoDto login = loginService.getLogin(loginDto);
 
         session.setAttribute("USER_ID" , login.userId());
         session.setAttribute("USER_NM" , login.userNm());

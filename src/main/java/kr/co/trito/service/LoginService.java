@@ -9,40 +9,28 @@ import kr.co.trito.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static kr.co.trito.enums.UserInfoErrorCode.*;
+import static kr.co.trito.enums.UserInfoErrorCode.NOT_MATCH_USER_INFO;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService {
     private final UserInfoRepository userInfoRepository;
 
-    public List<LoginUserInfoDto> getLogin(LoginDto loginDto) {
+    public LoginUserInfoDto getLogin(LoginDto loginDto) {
 
-        List<Tuple> userInfo = userInfoRepository.getLogin(
-                    loginDto.userId(),
-                    SecurityUtil.makeSHA256(loginDto.passwd())
+        Tuple userInfo = userInfoRepository.getLogin(
+                        loginDto.userId(),
+                        SecurityUtil.makeSHA256(loginDto.passwd())
                 )
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new UserInfoException(NOT_MATCH_USER_INFO));
 
-        if(userInfo.isEmpty()) throw new UserInfoException(NOT_MATCH_USER_INFO);
-
-        return userInfo.stream().map(tuple -> {
-            String userId = tuple.get("USER_ID", String.class);
-            String userNm = tuple.get("USER_NM", String.class);
-            String sawonNo = tuple.get("SAWON_NO", String.class);
-            String deptCd = tuple.get("DEPT_CD", String.class);
-            String deptNm = tuple.get("DEPT_NM", String.class);
-
-            return new LoginUserInfoDto(
-                        userId,
-                        userNm,
-                        sawonNo,
-                        deptCd,
-                        deptNm
-                    );
-        }).collect(Collectors.toList());
+        return new LoginUserInfoDto(
+                userInfo.get("USER_ID", String.class),
+                userInfo.get("USER_NM", String.class),
+                userInfo.get("SAWON_NO", String.class),
+                userInfo.get("DEPT_CD", String.class),
+                userInfo.get("DEPT_NM", String.class)
+        );
     }
 }
+

@@ -20,5 +20,5 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
           AND B.SAWON_NO = A.SAWON_NO
           AND B.OT_DATE IS NULL
     """, nativeQuery = true)
-    Optional<List<Tuple>> getLogin(@Param("userId") String userId, @Param("encPasswd") String encPasswd);
+    Optional<Tuple> getLogin(@Param("userId") String userId, @Param("encPasswd") String encPasswd);
 }
