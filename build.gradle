@@ -39,10 +39,6 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok"
     testAnnotationProcessor "org.projectlombok:lombok"
 
-    // flyway
-    implementation "org.flywaydb:flyway-core"
-    implementation 'org.flywaydb:flyway-mysql:8.4.4'
-
     // queryDsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
