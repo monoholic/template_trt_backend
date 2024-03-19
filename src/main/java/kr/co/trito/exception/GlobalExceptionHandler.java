@@ -1,6 +1,7 @@
 package kr.co.trito.exception;
 
 import kr.co.trito.domain.response.ErrorResponse;
+import kr.co.trito.enums.UserInfoErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,5 +17,12 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
         log.error(">>>>> Internal Server Error : {}", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INTERNAL_SERVER_ERROR.getErrorResponse());
+    }
+
+    @ExceptionHandler(UserInfoException.class)
+    protected ResponseEntity<ErrorResponse> handleMemberException(UserInfoException ex) {
+        log.warn(">>>>> UserInfoException : {}", ex);
+        UserInfoErrorCode errorCode = ex.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
 }
