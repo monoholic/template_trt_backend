@@ -1,10 +1,13 @@
 package kr.co.trito.domain.repository;
 
+import jakarta.persistence.Tuple;
 import kr.co.trito.domain.UserInfo;
-import kr.co.trito.dto.response.LoginUserInfoDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
     @Query(value = """
@@ -17,5 +20,5 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
           AND B.SAWON_NO = A.SAWON_NO
           AND B.OT_DATE IS NULL
     """, nativeQuery = true)
-    LoginUserInfoDto getLogin(@Param("userId") String userId, @Param("encPasswd") String encPasswd);
+    Optional<List<Tuple>> getLogin(@Param("userId") String userId, @Param("encPasswd") String encPasswd);
 }

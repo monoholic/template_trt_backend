@@ -23,10 +23,14 @@ public class LoginController {
         @Valid @RequestBody LoginDto loginDto,
         HttpSession session
     ){
-        LoginUserInfoDto login = loginService.getLogin(loginDto);
+        LoginUserInfoDto login = loginService.getLogin(loginDto).get(0);
 
-//        session.setAttribute("LoginUser", );
+        session.setAttribute("USER_ID" , login.userId());
+        session.setAttribute("USER_NM" , login.userNm());
+        session.setAttribute("SAWON_NO", login.sawonNo());
+        session.setAttribute("DEPT_CD" , login.deptCd());
+        session.setAttribute("DEPT_NM" , login.deptNm());
+
         return ResponseEntity.ok(new TritoResponse<>(login));
     }
-
 }
