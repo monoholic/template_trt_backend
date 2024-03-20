@@ -2,6 +2,7 @@ package kr.co.trito.exception;
 
 import kr.co.trito.domain.response.ErrorResponse;
 import kr.co.trito.enums.UserInfoErrorCode;
+import kr.co.trito.enums.WorkTimeErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,13 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleMemberException(UserInfoException ex) {
         log.warn(">>>>> UserInfoException : {}", ex);
         UserInfoErrorCode errorCode = ex.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
+
+    @ExceptionHandler(WorkTimeException.class)
+    protected ResponseEntity<ErrorResponse> handleWorkTimeException(WorkTimeException ex) {
+        log.warn(">>>>> WorkTimeException : {}", ex);
+        WorkTimeErrorCode errorCode = ex.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
 }

@@ -7,10 +7,12 @@ import kr.co.trito.dto.response.LoginUserInfoDto;
 import kr.co.trito.exception.UserInfoException;
 import kr.co.trito.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import static kr.co.trito.enums.UserInfoErrorCode.NOT_MATCH_USER_INFO;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LoginService {
