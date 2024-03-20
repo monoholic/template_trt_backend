@@ -12,6 +12,7 @@ public class WorkTime {
     @Id
     private String sawonNo;
 
+    @Id
     private Date startDt;
 
     private Date endDt;
