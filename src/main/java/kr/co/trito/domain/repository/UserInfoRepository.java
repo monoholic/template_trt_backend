@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
+public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
     @Query(value = """
         SELECT A.USER_ID AS USER_ID, A.PASSWD AS PASSWD, A.USER_NM AS USER_NM, A.SAWON_NO AS SAWON_NO, A.USE_YN AS USE_YN,
                B.DEPT_CD, F_GETDEPTNAME(B.DEPT_CD,'Y') AS DEPT_NM
