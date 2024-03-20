@@ -3,10 +3,12 @@ package kr.co.trito.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.sql.Date;
 
 @Entity
+@Table(name = "TBSY_DEPT")
 public class Dept {
     @Id
     @Column(name = "dept_cd")
