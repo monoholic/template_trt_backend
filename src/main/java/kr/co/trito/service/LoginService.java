@@ -2,8 +2,8 @@ package kr.co.trito.service;
 
 import jakarta.persistence.Tuple;
 import kr.co.trito.domain.repository.UserInfoRepository;
-import kr.co.trito.dto.request.LoginDto;
-import kr.co.trito.dto.response.LoginUserInfoDto;
+import kr.co.trito.dto.login.LoginDto;
+import kr.co.trito.dto.login.LoginUserInfoDto;
 import kr.co.trito.exception.UserInfoException;
 import kr.co.trito.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;

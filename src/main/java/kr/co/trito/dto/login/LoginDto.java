@@ -1,4 +1,4 @@
-package kr.co.trito.dto.request;
+package kr.co.trito.dto.login;
 
 public record LoginDto(
     String userId,

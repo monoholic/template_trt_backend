@@ -30,4 +30,15 @@ public interface WorkTimeRepository extends JpaRepository<WorkTime, String> {
         AND TO_CHAR(START_DT,'YYYYMMDD') = TO_CHAR(SYSDATE-1,'YYYYMMDD')
     """, nativeQuery = true)
     Optional<Tuple> getWorkTimeEnd(@Param("sawonNo") String sawonNo);
+
+    @Query(value = """
+    INSERT INTO TBPY_WORKTIME(SAWON_NO, START_DT, GUBUN_CD, ACCEPT_IP)
+    VALUES(
+           :sawonNo,
+           SYSDATE,
+           CASE WHEN TO_CHAR(SYSDATE,'D') = '1' OR TO_CHAR(SYSDATE,'D') = '7' THEN 'WT02' ELSE 'WT01' END,
+           :acceptIp
+    )
+    """, nativeQuery = true)
+    Integer insertWorkTimeStart(@Param("sawonNo") String sawonNo, @Param("acceptIp") String acceptIp);
 }

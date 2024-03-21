@@ -2,7 +2,7 @@ package kr.co.trito.service;
 
 import jakarta.persistence.Tuple;
 import kr.co.trito.domain.repository.WorkTimeRepository;
-import kr.co.trito.dto.response.WorkTimeDto;
+import kr.co.trito.dto.workTime.WorkTimeDto;
 import kr.co.trito.exception.WorkTimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,5 +46,9 @@ public class WorkTimeService {
         );
 
         return workTime;
+    }
+
+    public Integer regWorkTimeStart(String sawonNo, String acceptIp) {
+        return workTimeRepository.insertWorkTimeStart(sawonNo, acceptIp);
     }
 }

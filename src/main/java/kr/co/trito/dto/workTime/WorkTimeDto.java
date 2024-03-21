@@ -1,4 +1,4 @@
-package kr.co.trito.dto.response;
+package kr.co.trito.dto.workTime;
 
 import lombok.Builder;
 

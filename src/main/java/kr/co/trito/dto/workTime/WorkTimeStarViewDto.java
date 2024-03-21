@@ -1,6 +1,6 @@
-package kr.co.trito.dto.request;
+package kr.co.trito.dto.workTime;
 
-public record WorkTimeCommuteDto(
+public record WorkTimeStarViewDto(
         String menuId,
         String userId,
         String firstUrl
