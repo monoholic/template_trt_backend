@@ -1,13 +1,21 @@
 package kr.co.trito.dto;
 
-import lombok.Builder;
+import jakarta.servlet.http.HttpSession;
+import lombok.Getter;
 
-@Builder
-public record SessionDto(
-        String userId,
-        String userNm,
-        String sawonNo,
-        String deptCd,
-        String deptNm
-) {
+@Getter
+public class SessionDto {
+    private String userId;
+    private String userNm;
+    private String sawonNo;
+    private String deptCd;
+    private String deptNm;
+
+    public SessionDto(HttpSession session) {
+        this.userId = (String) session.getAttribute("USER_ID");
+        this.userNm = (String) session.getAttribute("USER_NM");
+        this.sawonNo = (String) session.getAttribute("SAWON_NO");
+        this.deptCd = (String) session.getAttribute("DEPT_CD");
+        this.deptNm = (String) session.getAttribute("DEPT_NM");
+    }
 }

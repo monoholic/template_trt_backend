@@ -28,7 +28,7 @@ public class WorkTimeService {
 
     public Map<String, Object> getWorkStartView(SessionDto sessionDto) {
         Map<String, Object> workTime = new HashMap<>();
-        String sawonNo = sessionDto.sawonNo();
+        String sawonNo = sessionDto.getSawonNo();
 
         List<Tuple> startWorkTime = workTimeRepository.getWorkTimeStart(sawonNo)
                 .orElseThrow(() -> new WorkTimeException(NOT_MATCH_WORK_TIME));
@@ -61,14 +61,15 @@ public class WorkTimeService {
     }
 
     @Transactional
-    public Integer regWorkTimeStart(String sawonNo, String acceptIp) {
+    public Integer regWorkTimeStart(SessionDto sessionDto, String acceptIp) {
+        String sawonNo = sessionDto.getSawonNo();
         return workTimeRepository.insertWorkTimeStart(sawonNo, acceptIp);
     }
 
     @Transactional
     public Integer regWorkTimeEnd(SessionDto sessionDto, String acceptIp) {
-        String sawonNo = sessionDto.sawonNo();
-        String userId = sessionDto.userId();
+        String sawonNo = sessionDto.getSawonNo();
+        String userId = sessionDto.getUserId();
 
         int cnt = workTimeRepository.insertWorkTimeEnd(sawonNo);
         String tcnt = transExpensesRepository.getTransExpensesCnt(sawonNo);
@@ -98,6 +99,12 @@ public class WorkTimeService {
                 }
             }
         }
+
+        return 0;
+    }
+
+    @Transactional
+    public Integer regWorkTimeCause(SessionDto sessionDto, String cause) {
 
         return 0;
     }
