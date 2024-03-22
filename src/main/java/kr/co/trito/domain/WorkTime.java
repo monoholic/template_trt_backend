@@ -1,7 +1,9 @@
 package kr.co.trito.domain;
 
-import jakarta.persistence.*;
-import kr.co.trito.domain.response.WorkTimePK;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
 
 import java.sql.Date;
 

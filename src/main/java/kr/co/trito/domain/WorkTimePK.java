@@ -1,4 +1,4 @@
-package kr.co.trito.domain.response;
+package kr.co.trito.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
