@@ -86,4 +86,13 @@ public interface WorkTimeRepository extends JpaRepository<WorkTime, String> {
            @Param("userId") String userId,
            @Param("acceptIp") String acceptIp
            );
+
+    @Modifying
+    @Query(value = """
+        UPDATE TBPY_WORKTIME
+        SET CAUSE = :cause
+        WHERE SAWON_NO = :sawonNo
+        AND TO_CHAR(START_DT,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+    """, nativeQuery = true)
+    Integer insertWorkTimeCause(@Param("sawonNo") String sawonNo, @Param("cause") String cause);
 }

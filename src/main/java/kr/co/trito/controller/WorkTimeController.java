@@ -5,12 +5,15 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import kr.co.trito.domain.response.TritoResponse;
 import kr.co.trito.dto.SessionDto;
+import kr.co.trito.dto.workTime.WorkTimeCauseDto;
 import kr.co.trito.dto.workTime.WorkTimeStartViewDto;
 import kr.co.trito.service.WorkTimeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,10 +28,8 @@ public class WorkTimeController {
     public ResponseEntity<TritoResponse<?>> getWorkTimeStarView(
             @Valid @RequestBody WorkTimeStartViewDto workTimeStartViewDto,
             HttpSession session
-            ) {
-
+    ) {
         SessionDto sessionDto = new SessionDto(session);
-
 
         return ResponseEntity.ok(new TritoResponse<>(workTimeService.getWorkStartView(sessionDto)));
     }
@@ -58,9 +59,7 @@ public class WorkTimeController {
         SessionDto sessionDto = new SessionDto(session);
         String acceptIp = request.getRemoteAddr();
 
-        workTimeService.regWorkTimeEnd(sessionDto, acceptIp);
-
-        return ResponseEntity.ok(new TritoResponse<>(""));
+        return ResponseEntity.ok(new TritoResponse<>(workTimeService.regWorkTimeEnd(sessionDto, acceptIp)));
     }
 
     /**
@@ -68,17 +67,12 @@ public class WorkTimeController {
      */
     @PostMapping("/workTimeCause")
     public ResponseEntity<TritoResponse<?>> regWorkTimeCause(
-        @Valid @RequestBody String cause,
-        HttpSession session
+            @Valid @RequestBody WorkTimeCauseDto workTimeCauseDto,
+            HttpSession session
     ) {
         SessionDto sessionDto = new SessionDto(session);
+        String cause = workTimeCauseDto.cause();
 
-//        SessionDto sessionDto = SessionDto.builder()
-//                .userId((String)session.getAttribute("USER_ID"))
-//                .build();
-
-        workTimeService.regWorkTimeCause(sessionDto, cause);
-
-        return ResponseEntity.ok(new TritoResponse<>(""));
+        return ResponseEntity.ok(new TritoResponse<>(workTimeService.regWorkTimeCause(sessionDto, cause)));
     }
 }

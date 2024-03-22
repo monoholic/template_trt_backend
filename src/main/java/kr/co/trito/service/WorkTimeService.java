@@ -6,6 +6,7 @@ import kr.co.trito.domain.repository.WorkTimeRepository;
 import kr.co.trito.dto.SessionDto;
 import kr.co.trito.dto.workTime.EndWorkTimeDto;
 import kr.co.trito.dto.workTime.StartWorkTimeDto;
+import kr.co.trito.enums.WorkTimeErrorCode;
 import kr.co.trito.exception.WorkTimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static kr.co.trito.enums.WorkTimeErrorCode.NOT_MATCH_WORK_TIME;
+import static kr.co.trito.enums.WorkTimeErrorCode.*;
 
 @Slf4j
 @Service
@@ -95,17 +96,23 @@ public class WorkTimeService {
 //                            .acceptIp(acceptIp)
 //                            .build();
 
-                    return workTimeRepository.insertOverTime(sawonNo, "ND", userId, acceptIp);
+                    workTimeRepository.insertOverTime(sawonNo, "ND", userId, acceptIp);
                 }
             }
-        }
 
-        return 0;
+            return overTimeObj.size();
+        }else {
+            throw new WorkTimeException(NOT_WORK_TIME_START_REGISTERED);
+        }
     }
 
     @Transactional
     public Integer regWorkTimeCause(SessionDto sessionDto, String cause) {
+        int cnt = workTimeRepository.insertWorkTimeCause(sessionDto.getSawonNo(), cause);
 
-        return 0;
+        if(cnt < 1)
+            throw new WorkTimeException(CAUSE_NOT_REGISTERED);
+
+        return cnt;
     }
 }
