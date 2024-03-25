@@ -1,9 +1,7 @@
-package kr.co.trito.domain.repository;
+package kr.co.trito.domain.repository.workTime;
 
-import jakarta.persistence.Tuple;
+import com.querydsl.core.Tuple;
 import kr.co.trito.domain.WorkTime;
-import kr.co.trito.dto.workTime.ExpensesDto;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

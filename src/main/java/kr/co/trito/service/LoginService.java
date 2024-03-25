@@ -1,7 +1,6 @@
 package kr.co.trito.service;
 
-import jakarta.persistence.Tuple;
-import kr.co.trito.domain.repository.UserInfoRepository;
+import kr.co.trito.domain.repository.userInfo.UserInfoRepository;
 import kr.co.trito.dto.login.LoginDto;
 import kr.co.trito.dto.login.LoginUserInfoDto;
 import kr.co.trito.exception.UserInfoException;
@@ -19,20 +18,18 @@ public class LoginService {
     private final UserInfoRepository userInfoRepository;
 
     public LoginUserInfoDto getLogin(LoginDto loginDto) {
+        LoginDto userInfo = LoginDto.builder()
+                .userId(loginDto.userId())
+                .passwd(SecurityUtil.makeSHA256(loginDto.passwd()))
+                .build();
 
-        Tuple userInfo = userInfoRepository.getLogin(
-                        loginDto.userId(),
-                        SecurityUtil.makeSHA256(loginDto.passwd())
-                )
-                .orElseThrow(() -> new UserInfoException(NOT_MATCH_USER_INFO));
+        LoginUserInfoDto loginUserInfo = userInfoRepository.getLogin(userInfo);
 
-        return new LoginUserInfoDto(
-                userInfo.get("USER_ID", String.class),
-                userInfo.get("USER_NM", String.class),
-                userInfo.get("SAWON_NO", String.class),
-                userInfo.get("DEPT_CD", String.class),
-                userInfo.get("DEPT_NM", String.class)
-        );
+        if(loginUserInfo == null) {
+            throw new UserInfoException(NOT_MATCH_USER_INFO);
+        }
+
+        return loginUserInfo;
     }
 }
 

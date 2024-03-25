@@ -5,16 +5,8 @@ import lombok.Builder;
 @Builder
 public record StartWorkTimeDto(
         String sawonNo,
-        String vstartDt,
-        String vendDt,
+        String vStartDt,
+        String vEndDt,
         String cause
 ) {
-    public static StartWorkTimeDto emptyWorkTime(){
-        return StartWorkTimeDto.builder()
-                .sawonNo("")
-                .vstartDt("")
-                .vendDt("")
-                .cause("")
-                .build();
-    }
 }
