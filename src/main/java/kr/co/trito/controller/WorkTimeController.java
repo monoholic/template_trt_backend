@@ -6,14 +6,11 @@ import jakarta.validation.Valid;
 import kr.co.trito.domain.response.TritoResponse;
 import kr.co.trito.dto.SessionDto;
 import kr.co.trito.dto.workTime.WorkTimeCauseDto;
-import kr.co.trito.dto.workTime.WorkTimeStartViewDto;
 import kr.co.trito.service.WorkTimeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

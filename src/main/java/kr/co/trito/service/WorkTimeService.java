@@ -1,12 +1,10 @@
 package kr.co.trito.service;
 
-import com.querydsl.core.Tuple;
 import kr.co.trito.domain.repository.transExpenses.TransExpensesRepository;
 import kr.co.trito.domain.repository.workTime.WorkTimeRepository;
-import kr.co.trito.domain.repository.workTime.WorkTimeTestRepository;
 import kr.co.trito.dto.SessionDto;
-import kr.co.trito.dto.workTime.EndWorkTimeDto;
-import kr.co.trito.dto.workTime.StartWorkTimeDto;
+import kr.co.trito.dto.workTime.WorkTimeEndDto;
+import kr.co.trito.dto.workTime.WorkTimeStartDto;
 import kr.co.trito.exception.WorkTimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import static kr.co.trito.enums.WorkTimeErrorCode.*;
+import static kr.co.trito.enums.WorkTimeErrorCode.CAUSE_NOT_REGISTERED;
 
 @Slf4j
 @Service
@@ -28,44 +24,15 @@ public class WorkTimeService {
     private final WorkTimeRepository workTimeRepository;
     private final TransExpensesRepository transExpensesRepository;
 
-    // Test WorkTime
-    private final WorkTimeTestRepository workTimeTestRepository;
-
     public Map<String, Object> getWorkStartView(SessionDto sessionDto) {
         Map<String, Object> workTime = new HashMap<>();
         String sawonNo = sessionDto.getSawonNo();
 
-//        List<Tuple> startWorkTime = workTimeRepository.getWorkTimeStart(sawonNo)
-//                .orElseThrow(() -> new WorkTimeException(NOT_MATCH_WORK_TIME));
-//
-//
-//        List<Tuple> endWorkTime = workTimeRepository.getWorkTimeEnd(sawonNo)
-//                .orElseThrow(() -> new WorkTimeException(NOT_MATCH_WORK_TIME));
+        WorkTimeStartDto startWorkTime = workTimeRepository.getWorkTimeStart(sawonNo);
+        WorkTimeEndDto endWorkTime = workTimeRepository.getWorkTimeEnd(sawonNo);
 
-        StartWorkTimeDto startWorkTime = workTimeTestRepository.getWorkTimeStart(sawonNo);
-
-        workTime.put("startWorkTime", startWorkTime);
-
-//        // 당일 출퇴근 조회
-//        workTime.put("startWorkTime",
-//                    startWorkTime.isEmpty() ? StartWorkTimeDto.emptyWorkTime() :
-//                            StartWorkTimeDto.builder()
-//                                .sawonNo(startWorkTime.get(0).get("SAWON_NO", String.class))
-//                                .vstartDt(startWorkTime.get(0).get("VSTART_DT", String.class))
-//                                .vendDt(startWorkTime.get(0).get("VEND_DT", String.class))
-//                                .cause(startWorkTime.get(0).get("CAUSE", String.class))
-//                                .build()
-//                );
-//
-//        // 전날 출퇴근 조회
-//        workTime.put("endWorkTime",
-//                endWorkTime.isEmpty() ? EndWorkTimeDto.emptyWorkTime() :
-//                        EndWorkTimeDto.builder()
-//                                .sawonNo(endWorkTime.get(0).get("SAWON_NO", String.class))
-//                                .vstartDt(endWorkTime.get(0).get("VSTART_DT", String.class))
-//                                .vendDt(endWorkTime.get(0).get("VEND_DT", String.class))
-//                                .build()
-//        );
+        workTime.put("startWorkTime", startWorkTime);   // 오늘 출퇴근 조회
+        workTime.put("endWorkTime", endWorkTime);       // 전날 출퇴근 조회
 
         return workTime;
     }
