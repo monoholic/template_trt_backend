@@ -6,7 +6,6 @@ import kr.co.trito.domain.repository.WorkTimeRepository;
 import kr.co.trito.dto.SessionDto;
 import kr.co.trito.dto.workTime.EndWorkTimeDto;
 import kr.co.trito.dto.workTime.StartWorkTimeDto;
-import kr.co.trito.enums.WorkTimeErrorCode;
 import kr.co.trito.exception.WorkTimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +36,7 @@ public class WorkTimeService {
         List<Tuple> endWorkTime = workTimeRepository.getWorkTimeEnd(sawonNo)
                 .orElseThrow(() -> new WorkTimeException(NOT_MATCH_WORK_TIME));
 
-        // 출근 시간
+        // 당일 출퇴근 조회
         workTime.put("startWorkTime",
                     startWorkTime.isEmpty() ? StartWorkTimeDto.emptyWorkTime() :
                             StartWorkTimeDto.builder()
@@ -48,7 +47,7 @@ public class WorkTimeService {
                                 .build()
                 );
 
-        // 퇴근 시간
+        // 전날 출퇴근 조회
         workTime.put("endWorkTime",
                 endWorkTime.isEmpty() ? EndWorkTimeDto.emptyWorkTime() :
                         EndWorkTimeDto.builder()
@@ -79,12 +78,9 @@ public class WorkTimeService {
             List<Tuple> overTimeObj = workTimeRepository.getOverTimeFlag()
                     .orElseThrow(RuntimeException::new);
 
-            String overTimeFlag = "";
-            String weekGbn = "";
-
             if(!overTimeObj.isEmpty()) {
-                overTimeFlag = String.valueOf(overTimeObj.get(0).get("OVERTIME_FLAG", Character.class));
-                weekGbn = String.valueOf(overTimeObj.get(0).get("WEEK_GBN", Character.class));
+                String overTimeFlag = String.valueOf(overTimeObj.get(0).get("OVERTIME_FLAG", Character.class));
+                String weekGbn = String.valueOf(overTimeObj.get(0).get("WEEK_GBN", Character.class));
 
                 if(overTimeFlag.equals("Y") && !weekGbn.equals("1") && !weekGbn.equals("7") && tcnt.equals("0")){
 
@@ -114,5 +110,35 @@ public class WorkTimeService {
             throw new WorkTimeException(CAUSE_NOT_REGISTERED);
 
         return cnt;
+    }
+
+
+    @Transactional
+    public Integer regWorkTimePreEnd(SessionDto sessionDto, String acceptIp) {
+        String sawonNo = sessionDto.getSawonNo();
+        String userId = sessionDto.getUserId();
+
+        int cnt = workTimeRepository.insertWorkTimePreEnd(sawonNo);
+        String tcnt = transExpensesRepository.getTransExpensesCnt(sawonNo);
+
+        if(cnt > 0) {
+            List<Tuple> overTimeObj = workTimeRepository.getOverTimeFlag()
+                    .orElseThrow(RuntimeException::new);
+
+            if(!overTimeObj.isEmpty()) {
+                // Empty 일때 "" 값 처리해야 됌
+                String overTimeFlag = String.valueOf(overTimeObj.get(0).get("OVERTIME_FLAG", Character.class));
+                String weekGbn = String.valueOf(overTimeObj.get(0).get("WEEK_GBN", Character.class));
+
+                if(overTimeFlag.equals("Y") && !weekGbn.equals("1") && !weekGbn.equals("7") && tcnt.equals("0")){
+
+                    workTimeRepository.insertOverTime(sawonNo, "ND", userId, acceptIp);
+                }
+            }
+
+            return overTimeObj.size();
+        }else {
+            throw new WorkTimeException(NOT_WORK_TIME_START_REGISTERED);
+        }
     }
 }

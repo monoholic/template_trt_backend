@@ -26,7 +26,6 @@ public class WorkTimeController {
      */
     @PostMapping("/workTimeStartView")
     public ResponseEntity<TritoResponse<?>> getWorkTimeStarView(
-            @Valid @RequestBody WorkTimeStartViewDto workTimeStartViewDto,
             HttpSession session
     ) {
         SessionDto sessionDto = new SessionDto(session);
@@ -74,5 +73,19 @@ public class WorkTimeController {
         String cause = workTimeCauseDto.cause();
 
         return ResponseEntity.ok(new TritoResponse<>(workTimeService.regWorkTimeCause(sessionDto, cause)));
+    }
+
+    /**
+     * 전날 퇴근 등록
+     */
+    @PostMapping("/workTimePreEndWrite")
+    public ResponseEntity<TritoResponse<?>> regWorkTimePreEndWrite(
+            HttpServletRequest request,
+            HttpSession session
+    ) {
+        SessionDto sessionDto = new SessionDto(session);
+        String acceptIp = request.getRemoteAddr();
+
+        return ResponseEntity.ok(new TritoResponse<>(workTimeService.regWorkTimePreEnd(sessionDto, acceptIp)));
     }
 }

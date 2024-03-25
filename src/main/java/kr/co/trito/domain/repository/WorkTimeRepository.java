@@ -95,4 +95,13 @@ public interface WorkTimeRepository extends JpaRepository<WorkTime, String> {
         AND TO_CHAR(START_DT,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
     """, nativeQuery = true)
     Integer insertWorkTimeCause(@Param("sawonNo") String sawonNo, @Param("cause") String cause);
+
+    @Modifying
+    @Query(value = """
+        UPDATE TBPY_WORKTIME
+        SET END_DT = SYSDATE
+        WHERE SAWON_NO = :sawonNo
+        AND TO_CHAR(START_DT,'YYYYMMDD') = TO_CHAR(SYSDATE-1,'YYYYMMDD')
+    """, nativeQuery = true)
+    Integer insertWorkTimePreEnd(@Param("sawonNo") String sawonNo);
 }
