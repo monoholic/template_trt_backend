@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import static kr.co.trito.domain.QCode.code1;
 import static kr.co.trito.domain.QSawonInfo.sawonInfo;
 import static kr.co.trito.domain.QWorkTime.workTime;
+import static kr.co.trito.utils.ExpressionUtil.toChar;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,16 +34,8 @@ public class WorkTimeRepositoryImpl implements WorkTimeCustom {
                 .select(Projections.constructor(WorkTimeStartDto.class,
                             workTime.sawonNo,
                             sawonInfo.sawonNm,
-                            Expressions.stringTemplate(
-                                    "TO_CHAR({0}, {1})",
-                                    workTime.startDt,
-                                    "YYYY/MM/DD HH24:MI:SS"
-                            ).as("v_start_dt"),
-                            Expressions.stringTemplate(
-                                    "TO_CHAR({0}, {1})",
-                                    workTime.endDt,
-                                    "YYYY/MM/DD HH24:MI:SS"
-                            ).as("v_end_dt"),
+                            toChar(workTime.startDt, "YYYY/MM/DD HH24:MI:SS", "v_start_dt"),
+                            toChar(workTime.endDt, "YYYY/MM/DD HH24:MI:SS", "v_end_dt"),
                             workTime.cause
                         )
                 )
@@ -62,16 +55,8 @@ public class WorkTimeRepositoryImpl implements WorkTimeCustom {
                 .select(Projections.constructor(WorkTimeEndDto.class,
                         workTime.sawonNo,
                         sawonInfo.sawonNm,
-                        Expressions.stringTemplate(
-                                "TO_CHAR({0}, {1})",
-                                workTime.startDt,
-                                "YYYY/MM/DD HH24:MI:SS"
-                        ).as("v_start_dt"),
-                        Expressions.stringTemplate(
-                                "TO_CHAR({0}, {1})",
-                                workTime.endDt,
-                                "YYYY/MM/DD HH24:MI:SS"
-                        ).as("v_end_dt")
+                        toChar(workTime.startDt, "YYYY/MM/DD HH24:MI:SS", "v_start_dt"),
+                        toChar(workTime.endDt, "YYYY/MM/DD HH24:MI:SS", "v_end_dt")
                     )
                 )
                 .from(workTime)
