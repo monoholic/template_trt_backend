@@ -5,11 +5,13 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.trito.dto.login.LoginDto;
 import kr.co.trito.dto.login.LoginUserInfoDto;
+import kr.co.trito.utils.ExpressionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import static kr.co.trito.domain.QSawonInfo.sawonInfo;
 import static kr.co.trito.domain.QUserInfo.userInfo;
+import static kr.co.trito.utils.ExpressionUtil.getDeptName;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,11 +28,7 @@ public class UserInfoRepositoryImpl implements UserInfoCustom {
                         userInfo.sawonNo,
                         userInfo.useYn,
                         sawonInfo.deptCd,
-                        Expressions.stringTemplate(
-                                "F_GETDEPTNAME({0}, {1})",
-                                sawonInfo.deptCd,
-                                "Y"
-                        ).as("deptNm")
+                        getDeptName(sawonInfo.deptCd, "Y", "deptNm")
                 ))
                 .from(userInfo, sawonInfo)
                 .where(

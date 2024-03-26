@@ -84,8 +84,6 @@ public class WorkTimeRepositoryImpl implements WorkTimeCustom {
                 .fetchOne();
     }
 
-
-
     @Override
     public Integer insertWorkTimeEnd(String sawonNo, String endIp) {
         LocalDateTime nowDateTime = LocalDateTime.now();
