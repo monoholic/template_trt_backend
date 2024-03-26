@@ -54,7 +54,7 @@ public class WorkTimeService {
                     workTimeRepository.insertOverTime(sawonNo, "ND", userId, acceptIp);
                 }
             }
-            return 1;
+            return cnt;
         }else {
             throw new WorkTimeException(END_WORK_TIME_NOT_REGISTERED);
         }
