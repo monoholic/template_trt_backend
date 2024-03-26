@@ -23,7 +23,9 @@ public class WorkTime {
 
     private String remarks;
 
-    private String acceptIp;
+    private String startIp;
+
+    private String endIp;
 
     private String cause;
 }
