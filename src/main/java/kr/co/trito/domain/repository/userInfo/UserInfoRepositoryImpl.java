@@ -1,11 +1,9 @@
 package kr.co.trito.domain.repository.userInfo;
 
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.trito.dto.login.LoginDto;
 import kr.co.trito.dto.login.LoginUserInfoDto;
-import kr.co.trito.utils.ExpressionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
