@@ -4,16 +4,12 @@ import kr.co.trito.domain.repository.transExpenses.TransExpensesRepository;
 import kr.co.trito.domain.repository.workTime.WorkTimeRepository;
 import kr.co.trito.dto.SessionDto;
 import kr.co.trito.dto.workTime.OverTimeDto;
-import kr.co.trito.dto.workTime.WorkTimeEndDto;
 import kr.co.trito.dto.workTime.WorkTimeStartDto;
 import kr.co.trito.exception.WorkTimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static kr.co.trito.enums.WorkTimeErrorCode.CAUSE_NOT_REGISTERED;
 
@@ -25,22 +21,16 @@ public class WorkTimeService {
     private final WorkTimeRepository workTimeRepository;
     private final TransExpensesRepository transExpensesRepository;
 
-    public Map<String, Object> getWorkStartView(SessionDto sessionDto) {
-        Map<String, Object> workTime = new HashMap<>();
+    public WorkTimeStartDto getWorkStartView(SessionDto sessionDto) {
         String sawonNo = sessionDto.getSawonNo();
 
-        WorkTimeStartDto startWorkTime = workTimeRepository.getWorkTimeStart(sawonNo);
-        WorkTimeEndDto endWorkTime = workTimeRepository.getWorkTimeEnd(sawonNo);
-
-        workTime.put("startWorkTime", startWorkTime);   // 오늘 출퇴근 조회
-        workTime.put("endWorkTime", endWorkTime);       // 전날 출퇴근 조회
-
-        return workTime;
+        return workTimeRepository.getWorkTimeStart(sawonNo);
     }
 
     @Transactional
     public Integer regWorkTimeStart(SessionDto sessionDto, String acceptIp) {
         String sawonNo = sessionDto.getSawonNo();
+
         return workTimeRepository.insertWorkTimeStart(sawonNo, acceptIp);
     }
 
