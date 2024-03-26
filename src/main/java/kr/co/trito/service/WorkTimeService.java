@@ -3,6 +3,7 @@ package kr.co.trito.service;
 import kr.co.trito.domain.repository.transExpenses.TransExpensesRepository;
 import kr.co.trito.domain.repository.workTime.WorkTimeRepository;
 import kr.co.trito.dto.SessionDto;
+import kr.co.trito.dto.workTime.OverTimeDto;
 import kr.co.trito.dto.workTime.WorkTimeEndDto;
 import kr.co.trito.dto.workTime.WorkTimeStartDto;
 import kr.co.trito.exception.WorkTimeException;
@@ -45,39 +46,28 @@ public class WorkTimeService {
 
     @Transactional
     public Integer regWorkTimeEnd(SessionDto sessionDto, String acceptIp) {
-//        String sawonNo = sessionDto.getSawonNo();
-//        String userId = sessionDto.getUserId();
-//
-//        int cnt = workTimeRepository.insertWorkTimeEnd(sawonNo);
-//        String tcnt = transExpensesRepository.getTransExpensesCnt(sawonNo);
-//
-//        if(cnt > 0) {
-//            List<Tuple> overTimeObj = workTimeRepository.getOverTimeFlag()
-//                    .orElseThrow(RuntimeException::new);
-//
-//            if(!overTimeObj.isEmpty()) {
-//                String overTimeFlag = String.valueOf(overTimeObj.get(0).get("OVERTIME_FLAG", Character.class));
-//                String weekGbn = String.valueOf(overTimeObj.get(0).get("WEEK_GBN", Character.class));
-//
-//                if(overTimeFlag.equals("Y") && !weekGbn.equals("1") && !weekGbn.equals("7") && tcnt.equals("0")){
-//
-//                    // querydsl 사용해서 개선할 예정
-////                    ExpensesDto expensesDto = ExpensesDto.builder()
-////                            .sawonNo(sawonNo)
-////                            .reqGbn("ND")
-////                            .userId(userId)
-////                            .acceptIp(acceptIp)
-////                            .build();
-//
-//                    workTimeRepository.insertOverTime(sawonNo, "ND", userId, acceptIp);
-//                }
-//            }
-//
-//            return overTimeObj.size();
-//        }else {
-//            throw new WorkTimeException(NOT_WORK_TIME_START_REGISTERED);
-//        }
-        return 0;
+        String sawonNo = sessionDto.getSawonNo();
+        String userId = sessionDto.getUserId();
+
+        int cnt = workTimeRepository.insertWorkTimeEnd(sawonNo, acceptIp);
+        String tcnt = transExpensesRepository.getTransExpensesCnt(sawonNo);
+
+        if(cnt > 0) {
+            OverTimeDto overTime = workTimeRepository.getOverTimeFlag();
+
+            if(overTime != null) {
+                String overTimeFlag = overTime.overTimeFlag();
+                String weekGbn = overTime.weekGbn();
+
+                if(overTimeFlag.equals("Y") && !weekGbn.equals("1") && !weekGbn.equals("7") && tcnt.equals("0")){
+                    workTimeRepository.insertOverTime(sawonNo, "ND", userId, acceptIp);
+                }
+            }
+            return 1;
+        }else {
+            return 0;
+        }
+
     }
 
     @Transactional

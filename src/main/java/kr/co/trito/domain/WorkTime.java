@@ -4,9 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 @IdClass(WorkTimePK.class)
 @Table(name = "TBPY_WORKTIME")
@@ -15,9 +22,9 @@ public class WorkTime {
     private String sawonNo;
 
     @Id
-    private Date startDt;
+    private LocalDateTime startDt;
 
-    private Date endDt;
+    private LocalDateTime endDt;
 
     private String gubunCd;
 
