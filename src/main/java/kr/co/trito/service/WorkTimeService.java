@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static kr.co.trito.enums.WorkTimeErrorCode.CAUSE_NOT_REGISTERED;
+import static kr.co.trito.enums.WorkTimeErrorCode.END_WORK_TIME_NOT_REGISTERED;
 
 @Slf4j
 @Service
@@ -55,7 +56,7 @@ public class WorkTimeService {
             }
             return 1;
         }else {
-            return 0;
+            throw new WorkTimeException(END_WORK_TIME_NOT_REGISTERED);
         }
 
     }
