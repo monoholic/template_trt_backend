@@ -24,3 +24,9 @@ logging:
   level:
     org.hibernate:
       sql: debug
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mapper/**/*.xml
+
