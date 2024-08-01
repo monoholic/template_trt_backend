@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.trito.domain.repository.mybatis.holiday.HolidayRepository">
+
+    <select id="getHolidayList" parameterType="map" resultType="kr.co.trito.dto.holiday.HolidayDto">
+        SELECT
+              s.SAWON_NM
+            , d.DEPT_NM
+            , h.START_DT
+            , h.END_DT
+            , h.CAUSE
+            , c.NAME AS GUBUN_CD
+        FROM  TBPY_HOLIDAY h
+            , TBSY_SAWON_INFO s
+            , TBSY_DEPT d
+            , TBSY_CODE c
+        WHERE h.SAWON_NO = #{sawonNo}
+          AND SUBSTR(h.START_DT, 1, 4) = #{year}
+          AND SUBSTR(h.END_DT, 1, 4) = #{year}
+          AND h.SAWON_NO = s.SAWON_NO
+          AND s.DEPT_CD = d.DEPT_CD
+          AND c.GROUP_CD = 'SY005'
+          AND h.GUBUN_CD = c.CODE
+    </select>
+
+    <select id="checkHoliday" parameterType="kr.co.trito.dto.holiday.HolidayRegDto" resultType="_int">
+        <![CDATA[
+        SELECT count(*)
+        FROM (
+            SELECT * FROM TBPY_HOLIDAY
+            WHERE SAWON_NO = #{sawonNo}
+            AND START_DT LIKE CONCAT(SUBSTR(#{startDt}, 1, 4), '%')
+        )
+        WHERE START_DT <= #{startDt}
+        AND END_DT >= #{startDt}
+        ]]>
+    </select>
+
+    <insert id="regHoliday" parameterType="kr.co.trito.dto.holiday.HolidayRegDto">
+        INSERT INTO TBPY_HOLIDAY h
+        ("SAWON_NO", "START_DT", "END_DT", "CAUSE", "REG_ID", "REG_DT", "GUBUN_CD")
+        VALUES (
+        #{sawonNo}, #{startDt}, #{endDt}, #{cause}, #{sawonNo}, SYSDATE, #{gubunCd}
+        )
+    </insert>
+</mapper>

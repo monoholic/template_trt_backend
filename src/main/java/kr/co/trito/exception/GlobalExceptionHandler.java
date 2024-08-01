@@ -1,6 +1,7 @@
 package kr.co.trito.exception;
 
 import kr.co.trito.domain.response.ErrorResponse;
+import kr.co.trito.enums.HolidayErrorCode;
 import kr.co.trito.enums.UserInfoErrorCode;
 import kr.co.trito.enums.WorkTimeErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,13 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleWorkTimeException(WorkTimeException ex) {
         log.warn(">>>>> WorkTimeException : {}", ex);
         WorkTimeErrorCode errorCode = ex.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
+
+    @ExceptionHandler(HolidayException.class)
+    protected ResponseEntity<ErrorResponse> handleHolidayException(HolidayException ex) {
+        log.warn(">>>>> HolidayException : {}", ex);
+        HolidayErrorCode errorCode = ex.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
 }
