@@ -1,4 +1,4 @@
-package kr.co.trito.domain.repository.userInfo;
+package kr.co.trito.domain.repository.Jpa.userInfo;
 
 import kr.co.trito.domain.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;

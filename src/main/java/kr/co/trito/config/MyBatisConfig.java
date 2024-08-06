@@ -32,7 +32,7 @@ public class MyBatisConfig {
     @ConfigurationProperties(prefix = "mybatis")
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setTypeAliasesPackage("kr.co.trito.dto");
+        sqlSessionFactoryBean.setTypeAliasesPackage("kr.co.trito.dto.Mybatis");
         sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         sqlSessionFactoryBean.setMapperLocations(
         applicationContext.getResources("classpath:/mapper/**/*.xml"));

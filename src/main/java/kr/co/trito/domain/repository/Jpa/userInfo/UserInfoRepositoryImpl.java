@@ -1,9 +1,9 @@
-package kr.co.trito.domain.repository.userInfo;
+package kr.co.trito.domain.repository.Jpa.userInfo;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.trito.dto.login.LoginDto;
-import kr.co.trito.dto.login.LoginUserInfoDto;
+import kr.co.trito.dto.Jpa.login.LoginDto;
+import kr.co.trito.dto.Jpa.login.LoginUserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

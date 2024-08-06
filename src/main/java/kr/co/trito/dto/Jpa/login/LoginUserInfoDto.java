@@ -1,4 +1,4 @@
-package kr.co.trito.dto.login;
+package kr.co.trito.dto.Jpa.login;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

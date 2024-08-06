@@ -1,4 +1,4 @@
-package kr.co.trito.domain.repository.transExpenses;
+package kr.co.trito.domain.repository.Jpa.transExpenses;
 
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

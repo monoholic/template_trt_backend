@@ -1,15 +1,20 @@
 package kr.co.trito.service;
 
-import kr.co.trito.domain.repository.transExpenses.TransExpensesRepository;
-import kr.co.trito.domain.repository.workTime.WorkTimeRepository;
+import kr.co.trito.domain.repository.Jpa.transExpenses.TransExpensesRepository;
+import kr.co.trito.domain.repository.Jpa.workTime.WorkTimeRepository;
+import kr.co.trito.domain.repository.mybatis.workTime.WorkTimeMapper;
+import kr.co.trito.dto.Mybatis.WorkTime.WorkTimeDto;
 import kr.co.trito.dto.SessionDto;
-import kr.co.trito.dto.workTime.OverTimeDto;
-import kr.co.trito.dto.workTime.WorkTimeStartDto;
+import kr.co.trito.dto.Jpa.workTime.OverTimeDto;
+import kr.co.trito.dto.Jpa.workTime.WorkTimeStartDto;
 import kr.co.trito.exception.WorkTimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static kr.co.trito.enums.WorkTimeErrorCode.CAUSE_NOT_REGISTERED;
 import static kr.co.trito.enums.WorkTimeErrorCode.END_WORK_TIME_NOT_REGISTERED;
@@ -22,10 +27,13 @@ public class WorkTimeService {
     private final WorkTimeRepository workTimeRepository;
     private final TransExpensesRepository transExpensesRepository;
 
-    public WorkTimeStartDto getWorkStartView(SessionDto sessionDto) {
+    @Autowired
+    WorkTimeMapper workTimeMapper;
+
+    public WorkTimeDto getWorkStartView(SessionDto sessionDto) {
         String sawonNo = sessionDto.getSawonNo();
 
-        return workTimeRepository.getWorkTimeStart(sawonNo);
+        return workTimeMapper.getWorkTime(sawonNo);
     }
 
     @Transactional

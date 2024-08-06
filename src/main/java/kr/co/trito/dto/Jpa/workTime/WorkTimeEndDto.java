@@ -1,13 +1,12 @@
-package kr.co.trito.dto.workTime;
+package kr.co.trito.dto.Jpa.workTime;
 
 import lombok.Builder;
 
 @Builder
-public record WorkTimeStartDto(
+public record WorkTimeEndDto(
         String sawonNo,
         String sawonNm,
         String vStartDt,
-        String vEndDt,
-        String cause
+        String vEndDt
 ) {
 }

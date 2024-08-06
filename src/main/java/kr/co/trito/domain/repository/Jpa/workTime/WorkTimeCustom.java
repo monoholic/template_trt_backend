@@ -1,8 +1,8 @@
-package kr.co.trito.domain.repository.workTime;
+package kr.co.trito.domain.repository.Jpa.workTime;
 
-import kr.co.trito.dto.workTime.OverTimeDto;
-import kr.co.trito.dto.workTime.WorkTimeEndDto;
-import kr.co.trito.dto.workTime.WorkTimeStartDto;
+import kr.co.trito.dto.Jpa.workTime.OverTimeDto;
+import kr.co.trito.dto.Jpa.workTime.WorkTimeEndDto;
+import kr.co.trito.dto.Jpa.workTime.WorkTimeStartDto;
 
 public interface WorkTimeCustom {
     WorkTimeStartDto getWorkTimeStart(String sawonNo);

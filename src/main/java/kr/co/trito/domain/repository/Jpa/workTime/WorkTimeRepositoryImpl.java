@@ -1,4 +1,4 @@
-package kr.co.trito.domain.repository.workTime;
+package kr.co.trito.domain.repository.Jpa.workTime;
 
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -8,9 +8,9 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import kr.co.trito.dto.workTime.OverTimeDto;
-import kr.co.trito.dto.workTime.WorkTimeEndDto;
-import kr.co.trito.dto.workTime.WorkTimeStartDto;
+import kr.co.trito.dto.Jpa.workTime.OverTimeDto;
+import kr.co.trito.dto.Jpa.workTime.WorkTimeEndDto;
+import kr.co.trito.dto.Jpa.workTime.WorkTimeStartDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

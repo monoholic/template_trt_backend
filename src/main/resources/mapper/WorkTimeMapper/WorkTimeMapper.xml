@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.trito.domain.repository.mybatis.workTime.WorkTimeMapper">
+
+    <select id="getWorkTime" resultType="kr.co.trito.dto.Mybatis.WorkTime.WorkTimeDto">
+        SELECT
+        MAX(Sawon_no) AS Sawon_no,
+        MAX(CASE WHEN TRUNC(Start_DT) = TRUNC(SYSDATE - 1) THEN Start_DT END) AS Ld_Start,
+        MAX(CASE WHEN TRUNC(End_DT) = TRUNC(SYSDATE - 1) THEN End_DT END) AS Ld_End,
+        MAX(CASE WHEN TRUNC(Start_DT) = TRUNC(SYSDATE) THEN Start_DT END) AS To_Start,
+        MAX(CASE WHEN TRUNC(End_DT) = TRUNC(SYSDATE) THEN End_DT END) AS To_End
+        FROM
+        TBPY_WORKTIME
+        WHERE
+        TRUNC(Start_DT) IN (TRUNC(SYSDATE - 1), TRUNC(SYSDATE))
+        OR TRUNC(End_DT) IN (TRUNC(SYSDATE - 1), TRUNC(SYSDATE))
+    </select>
+
+</mapper>

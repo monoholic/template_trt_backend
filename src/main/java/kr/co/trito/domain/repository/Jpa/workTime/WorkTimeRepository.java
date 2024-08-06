@@ -1,4 +1,4 @@
-package kr.co.trito.domain.repository.workTime;
+package kr.co.trito.domain.repository.Jpa.workTime;
 
 import kr.co.trito.domain.WorkTime;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -5,7 +5,22 @@
 <mapper namespace="kr.co.trito.domain.repository.mybatis.TestMapper">
 
     <select id="selectUser" resultType="kr.co.trito.dto.TestDTO">
-        SELECT * FROM TBSY_USER_INFO
+        SELECT
+        SAWON_NO,
+        GUBUN_CD ,
+        REMARKS ,
+        START_IP ,
+        CAUSE ,
+        END_IP ,
+        MAX(CASE WHEN TRUNC(Start_DT) = TRUNC(SYSDATE - 1) THEN Start_DT END) AS Yesterday_Start,
+        MAX(CASE WHEN TRUNC(End_DT) = TRUNC(SYSDATE - 1) THEN End_DT END) AS Yesterday_End,
+        MAX(CASE WHEN TRUNC(Start_DT) = TRUNC(SYSDATE) THEN Start_DT END) AS Today_Start,
+        MAX(CASE WHEN TRUNC(End_DT) = TRUNC(SYSDATE) THEN End_DT END) AS Today_End
+        FROM TBPY_WORKTIME
+        WHERE TRUNC(Start_DT) IN (TRUNC(SYSDATE - 1), TRUNC(SYSDATE))
+        OR TRUNC(End_DT) IN (TRUNC(SYSDATE - 1), TRUNC(SYSDATE))
+        <!-- AND SAWON_NO = #{SAWON_NO}-->
+        GROUP BY SAWON_NO,GUBUN_CD,REMARKS ,START_IP ,CAUSE ,END_IP;
     </select>
 
 </mapper>

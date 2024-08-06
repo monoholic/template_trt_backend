@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import kr.co.trito.domain.response.TritoResponse;
 import kr.co.trito.dto.SessionDto;
 import kr.co.trito.dto.TestDTO;
-import kr.co.trito.dto.workTime.WorkTimeCauseDto;
+import kr.co.trito.dto.Jpa.workTime.WorkTimeCauseDto;
 import kr.co.trito.service.TestService;
 import kr.co.trito.service.WorkTimeService;
 import lombok.RequiredArgsConstructor;

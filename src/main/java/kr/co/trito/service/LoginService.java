@@ -1,8 +1,8 @@
 package kr.co.trito.service;
 
-import kr.co.trito.domain.repository.userInfo.UserInfoRepository;
-import kr.co.trito.dto.login.LoginDto;
-import kr.co.trito.dto.login.LoginUserInfoDto;
+import kr.co.trito.domain.repository.Jpa.userInfo.UserInfoRepository;
+import kr.co.trito.dto.Jpa.login.LoginDto;
+import kr.co.trito.dto.Jpa.login.LoginUserInfoDto;
 import kr.co.trito.exception.UserInfoException;
 import kr.co.trito.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
