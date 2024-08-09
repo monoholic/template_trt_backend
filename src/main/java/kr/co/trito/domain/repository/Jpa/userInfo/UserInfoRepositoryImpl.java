@@ -26,6 +26,7 @@ public class UserInfoRepositoryImpl implements UserInfoCustom {
                         userInfo.sawonNo,
                         userInfo.useYn,
                         sawonInfo.deptCd,
+                        sawonInfo.jikcheck,
                         getDeptName(sawonInfo.deptCd, "Y", "deptNm")
                 ))
                 .from(userInfo, sawonInfo)

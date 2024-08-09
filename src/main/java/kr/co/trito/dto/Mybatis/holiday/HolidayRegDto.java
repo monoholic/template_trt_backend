@@ -1,4 +1,4 @@
-package kr.co.trito.dto.holiday;
+package kr.co.trito.dto.Mybatis.holiday;
 
 import lombok.Getter;
 import lombok.Setter;

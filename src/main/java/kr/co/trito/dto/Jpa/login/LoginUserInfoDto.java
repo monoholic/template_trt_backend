@@ -11,6 +11,7 @@ public record LoginUserInfoDto(
         @JsonIgnore
         String userYn,
         String deptCd,
+        String jikcheck,
         String deptNm
 ) {
 }

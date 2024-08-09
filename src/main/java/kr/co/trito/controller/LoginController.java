@@ -30,6 +30,7 @@ public class LoginController {
         session.setAttribute("SAWON_NO", login.sawonNo());
         session.setAttribute("DEPT_CD" , login.deptCd());
         session.setAttribute("DEPT_NM" , login.deptNm());
+        session.setAttribute("JIKCHECK", login.jikcheck());
 
         return ResponseEntity.ok(new TritoResponse<>(login));
     }

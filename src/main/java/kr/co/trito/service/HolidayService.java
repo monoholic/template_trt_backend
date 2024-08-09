@@ -1,18 +1,16 @@
 package kr.co.trito.service;
 
+import jakarta.validation.Valid;
 import kr.co.trito.domain.repository.mybatis.holiday.HolidayRepository;
+import kr.co.trito.dto.Mybatis.holiday.*;
 import kr.co.trito.dto.SessionDto;
-import kr.co.trito.dto.holiday.HolidayDto;
-import kr.co.trito.dto.holiday.HolidayRegDto;
 import kr.co.trito.exception.HolidayException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static kr.co.trito.enums.HolidayErrorCode.HOLIDAY_DATE_DUPLICATION;
 import static kr.co.trito.enums.HolidayErrorCode.NOT_REG_HOLIDAY;
@@ -25,16 +23,22 @@ public class HolidayService {
 
     private final HolidayRepository holidayRepository;
 
-    public List<HolidayDto> getHolidayList(SessionDto sessionDto, int year) {
+    // 연차 사용 현황 조회
+    public DayOffDtd getDayOffData(SessionDto sessionDto) {
         String sawonNo = sessionDto.getSawonNo();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("sawonNo", sawonNo);
-        map.put("year", year);
-
-        return holidayRepository.getHolidayList(map);
+        return holidayRepository.getDayOffData(sawonNo);
     }
 
+    // 휴가 목록 조회
+    public List<HolidayDto> getHolidayList(SessionDto sessionDto, HolidayGetDto holidayGetDto) {
+
+        holidayGetDto.setSawonNo(sessionDto.getSawonNo());
+
+        return holidayRepository.getHolidayList(holidayGetDto);
+    }
+
+    // 휴가 등록
     public Long regHoliday(SessionDto sessionDto, HolidayRegDto holidayRegDto) {
 
         holidayRegDto.setSawonNo(sessionDto.getSawonNo());
@@ -54,5 +58,15 @@ public class HolidayService {
             throw new HolidayException(NOT_REG_HOLIDAY);
         }
         return (long)cnt;
+    }
+
+    // 달력 데이터 조회
+    public List<HolidayCalendar> getCalendarData(SessionDto sessionDto, HolidayGetDto holidayGetDto) {
+
+        holidayGetDto.setSawonNo(sessionDto.getSawonNo());
+
+        System.out.println("holidayGetDto ==> " + holidayGetDto.toString());
+
+        return holidayRepository.getCalendarData(holidayGetDto);
     }
 }

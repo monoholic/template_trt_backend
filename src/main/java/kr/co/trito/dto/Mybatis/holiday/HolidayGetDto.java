@@ -1,0 +1,14 @@
+package kr.co.trito.dto.Mybatis.holiday;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class HolidayGetDto {
+    int year;
+    String searchQuery;
+    String sawonNo;
+}
