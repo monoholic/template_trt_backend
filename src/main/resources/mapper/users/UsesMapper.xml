@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.trito.domain.repository.mybatis.users.UsesRepository">
+
+    <select id="getUserList" parameterType="kr.co.trito.dto.Mybatis.users.UserListParamsDto" resultType="kr.co.trito.dto.Mybatis.users.UserListDto">
+        SELECT
+            ROW_NUMBER() OVER(ORDER BY CAST(USER_ID AS int)) AS rn
+            , USER_ID
+            , USER_NM
+            , DEPT_CD
+            , JIKGYUB
+            , EMAIL
+            , TEL_NO
+            , GENDER
+            , USE_YN
+            , REG_ID
+            , TO_CHAR(REG_DATE, 'YYYY-MM-DD')
+            , UPT_ID
+            , TO_CHAR(UPT_DATE, 'YYYY-MM-DD')
+        FROM TP_USER_INFO
+        WHERE 1=1
+            <if test="">
+                AND
+            </if>
+    </select>
+</mapper>
