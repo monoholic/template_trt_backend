@@ -2,7 +2,8 @@ spring:
   config:
     activate:
       on-profile: dev
-
+  jwt:
+    secret: 4b5c0b4bfa644e81161457bc9a5dae3f8ed9c0050ba8610d99f46c9e59845b6f
   datasource:
     url: jdbc:oracle:thin:@www.trito.co.kr:1521:TRITODB
     username: trito_dev
@@ -11,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
 
     show-sql: true
     properties:
