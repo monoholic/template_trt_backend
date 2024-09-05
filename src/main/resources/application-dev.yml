@@ -12,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none #해당 속성값이 create 인 경우 jqa에 포함되어있는 테이블을 삭제 후 재생성함.
 
     show-sql: true
     properties:
