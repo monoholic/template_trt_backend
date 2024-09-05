@@ -4,25 +4,52 @@
 
 <mapper namespace="kr.co.trito.domain.repository.mybatis.users.UsesRepository">
 
-    <select id="getUserList" parameterType="kr.co.trito.dto.Mybatis.users.UserListParamsDto" resultType="kr.co.trito.dto.Mybatis.users.UserListDto">
-        SELECT
-            ROW_NUMBER() OVER(ORDER BY CAST(USER_ID AS int)) AS rn
-            , USER_ID
-            , USER_NM
-            , DEPT_CD
-            , JIKGYUB
-            , EMAIL
-            , TEL_NO
-            , GENDER
-            , USE_YN
-            , REG_ID
-            , TO_CHAR(REG_DATE, 'YYYY-MM-DD')
-            , UPT_ID
-            , TO_CHAR(UPT_DATE, 'YYYY-MM-DD')
+    <!-- total rows   -->
+    <select id="selectCountUser" parameterType="kr.co.trito.dto.Mybatis.users.UserListParamsDto" resultType="int">
+        SELECT COUNT(*)
         FROM TP_USER_INFO
         WHERE 1=1
-            <if test="">
-                AND
-            </if>
+        <if test="userId != null">
+            AND USER_ID LIKE CONCAT(CONCAT('%', #{userId}), '%')
+        </if>
+        <if test="userNm != null">
+            AND USER_NM LIKE CONCAT(CONCAT('%', #{userNm}), '%')
+        </if>
+    </select>
+
+    <!--  사용자 목록 조회  -->
+    <select id="getUserList" parameterType="kr.co.trito.dto.Mybatis.users.UserParmsDto" resultType="kr.co.trito.dto.Mybatis.users.UserListDto">
+        SELECT *
+        FROM(
+        SELECT
+        ROW_NUMBER() OVER(ORDER BY USER_ID ASC) AS rn
+        , USER_ID
+        , USER_NM
+        , DEPT_CD AS deptNm
+        , JIKGYUB
+        , EMAIL
+        , TEL_NO
+        , GENDER
+        , USE_YN
+        , REG_ID
+        , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS regDate
+        , UPT_ID
+        , TO_CHAR(UPT_DATE, 'YYYY-MM-DD') AS uptDate
+        FROM TP_USER_INFO
+        WHERE 1=1
+        <if test="userListParamsDto.userId != null">
+            AND USER_ID LIKE CONCAT(CONCAT('%', #{userListParamsDto.userId}), '%')
+        </if>
+        <if test="userListParamsDto.userNm != null">
+            AND USER_NM LIKE CONCAT(CONCAT('%', #{userListParamsDto.userNm}), '%')
+        </if>
+        <if test="userListParamsDto.sortBy != null and userListParamsDto.descending == 'ac'">
+            ORDER BY #{userListParamsDto.sortBy} ASC
+        </if>
+        <if test="userListParamsDto.sortBy != null and userListParamsDto.descending == 'dc'">
+            ORDER BY #{userListParamsDto.sortBy} DESC
+        </if>
+        )
+        WHERE rn BETWEEN #{condition.start} AND #{condition.end}
     </select>
 </mapper>
