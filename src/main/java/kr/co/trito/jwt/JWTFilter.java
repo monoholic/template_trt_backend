@@ -68,13 +68,13 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        // username, role 값을 획득
-        String username = jwtUtil.getUsername(accessToken);
+        // userId, role 값을 획득
+        String userId = jwtUtil.getUserId(accessToken);
         String role = jwtUtil.getRole(accessToken);
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(username);
-        userEntity.setRole(role);
+        userEntity.setUserId(userId);
+        //userEntity.setRole(role);
         CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());

@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
-    boolean existsByUsername(String username);
+    boolean existsByUserId(String userId);
 
-    //username을 받아 회원을 조회 하는 method
-    UserEntity findByUsername(String username);
+    //userId 받아 회원을 조회 하는 method
+    UserEntity findByUserId(String userId);
 }
