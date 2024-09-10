@@ -12,6 +12,8 @@
              , MENU_LVL
              , URL
              , MENU_DESC
+             , ROUTE_YN
+             , MENU_ICON
           FROM TP_COMM_MENU
          WHERE USE_YN = 'Y'
          ORDER BY NVL(UPP_MENU_ID, 0), MENU_LVL, SORT_ORD 

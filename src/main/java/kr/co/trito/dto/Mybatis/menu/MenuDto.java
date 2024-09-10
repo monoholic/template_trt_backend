@@ -10,4 +10,6 @@ public class MenuDto{
     private String menuLvl;
     private String url;
     private String menuDesc;
+    private String routeYn;
+    private String menuIcon;
 }
