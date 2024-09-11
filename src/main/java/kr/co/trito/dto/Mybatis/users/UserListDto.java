@@ -8,6 +8,7 @@ public class UserListDto {
     private String userNm;
     private String deptNm;
     private String jikgyub;
+    private String role;
     private String email;
     private String telNo;
     private String gender;

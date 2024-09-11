@@ -11,4 +11,5 @@ public class UserListParamsDto {
     // 검색
     private String userId;
     private String userNm;
+    private String useYn;
 }

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.trito.domain.repository.mybatis.users.UsesRepository">
+
+    <!-- total rows -->
+    <select id="selectCountUser" parameterType="kr.co.trito.dto.Mybatis.users.UserListParamsDto" resultType="int">
+        SELECT COUNT(*)
+        FROM TP_USER_INFO
+        WHERE 1=1
+        <if test="userId != null">
+            AND USER_ID LIKE CONCAT(CONCAT('%', #{userId}), '%')
+        </if>
+        <if test="userNm != null">
+            AND USER_NM LIKE CONCAT(CONCAT('%', #{userNm}), '%')
+        </if>
+        <if test="useYn != null">
+            AND USE_YN = #{useYn}
+        </if>
+    </select>
+
+    <!-- 사용자 목록 조회 -->
+    <select id="getUserList" parameterType="kr.co.trito.dto.Mybatis.users.UserParmsDto" resultType="kr.co.trito.dto.Mybatis.users.UserListDto">
+        SELECT *
+        FROM(
+            SELECT
+                ROWNUM AS rn
+                , USER_ID
+                , USER_NM
+                , DEPT_CD AS deptNm
+                , JIKGYUB
+                , ROLE
+                , EMAIL
+                , TEL_NO
+                , GENDER
+                , USE_YN
+                , REG_ID
+                , REG_DATE
+                , UPT_ID
+                , UPT_DATE
+            FROM(
+                SELECT
+                      USER_ID
+                    , USER_NM
+                    , DEPT_CD
+                    , JIKGYUB
+                    , ROLE
+                    , EMAIL
+                    , TEL_NO
+                    , GENDER
+                    , USE_YN
+                    , REG_ID
+                    , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE
+                    , UPT_ID
+                    , TO_CHAR(UPT_DATE, 'YYYY-MM-DD') AS UPT_DATE
+                FROM TP_USER_INFO
+                WHERE 1=1
+                    <if test="userListParamsDto.userId != null">
+                        AND USER_ID LIKE CONCAT(CONCAT('%', #{userListParamsDto.userId}), '%')
+                    </if>
+                    <if test="userListParamsDto.userNm != null">
+                        AND USER_NM LIKE CONCAT(CONCAT('%', #{userListParamsDto.userNm}), '%')
+                    </if>
+                    <if test="userListParamsDto.useYn != null">
+                        AND USE_YN = #{userListParamsDto.useYn}
+                    </if>
+                <if test="userListParamsDto.sortBy != null and userListParamsDto.descending == 'ac'">
+                    ORDER BY ${userListParamsDto.sortBy} ASC
+                </if>
+                <if test="userListParamsDto.sortBy != null and userListParamsDto.descending == 'dc'">
+                    ORDER BY ${userListParamsDto.sortBy} DESC
+                </if>
+            )
+        )
+        WHERE rn BETWEEN #{condition.start} AND #{condition.end}
+    </select>
+
+    <!-- 아이디 중복 체크 -->
+    <select id="checkUserId" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+          FROM TP_USER_INFO
+         WHERE USER_ID = #{userId}
+    </select>
+
+    <!--  유저 등록  -->
+    <insert id="addUser" parameterType="kr.co.trito.dto.Mybatis.users.UserAddMod">
+        INSERT INTO TP_USER_INFO
+        (
+          USER_ID
+        , USER_NM
+        , DEPT_CD
+        , JIKGYUB
+        , ROLE
+        , EMAIL
+        , TEL_NO
+        , GENDER
+        , USE_YN
+        , REG_ID
+        , REG_DATE
+        , PASSWORD
+        )
+        VALUES
+        (
+          #{userId}
+        , #{userNm}
+        , #{deptNm}
+        , #{jikgyub}
+        , #{role}
+        , #{email}
+        , #{telNo}
+        , #{gender}
+        , #{useYn}
+        , 'admin'
+        , SYSDATE
+        , #{password}
+        )
+    </insert>
+
+    <!--  유저 수정  -->
+    <update id="modUser" parameterType="kr.co.trito.dto.Mybatis.users.UserAddMod">
+        UPDATE TP_USER_INFO
+        SET
+            USER_NM = #{userNm}
+            , DEPT_CD = #{deptNm}
+            , JIKGYUB = #{jikgyub}
+            , ROLE = #{role}
+            , EMAIL = #{email}
+            , TEL_NO = #{telNo}
+            , GENDER = #{gender}
+            , USE_YN = #{useYn}
+            , UPT_ID = 'admin2'
+            , UPT_DATE = SYSDATE
+        WHERE USER_ID = #{userId}
+    </update>
+
+    <!--  사용자 삭제  -->
+    <update id="delUser" parameterType="java.util.List">
+        UPDATE TP_USER_INFO
+           SET USE_YN = 'N'
+         WHERE USER_ID IN
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+    </update>
+</mapper>
