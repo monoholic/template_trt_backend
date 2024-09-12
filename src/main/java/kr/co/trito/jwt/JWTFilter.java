@@ -5,7 +5,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.co.trito.config.SecurityConfig;
 import kr.co.trito.dto.Jpa.login.CustomUserDetails;
 import kr.co.trito.entity.UserEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

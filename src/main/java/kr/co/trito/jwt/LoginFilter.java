@@ -61,7 +61,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
-        System.out.println("ACCESS TOKEN");
     }
 
     //로그인 실패시 실행하는 메소드
@@ -75,10 +74,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        //cookie.setPath("/");
+//        cookie.setMaxAge(24*60*60);
+        //cookie.setSecure(false);
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
+        cookie.setDomain("localhost");
 
         return cookie;
     }
