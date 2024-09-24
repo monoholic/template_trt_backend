@@ -3,6 +3,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.trito.domain.repository.mybatis.comCode.ComCodeRepository">
+
+<!-- ======== 공통코드 그룹 관리 ======== -->
     <!-- total rows -->
     <select id="selectCountGrpCode" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeGrpListParamsDto" resultType="int">
         SELECT COUNT(*)
@@ -17,21 +19,12 @@
     </select>
 
     <!-- 공통코드 그룹 목록 조회 -->
-    <select id="getComCodeGrpList" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeGrpParmsDto" resultType="kr.co.trito.dto.Mybatis.comCode.ComCodeGrpListDto">
+    <select id="getComCodeGrpList" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeGrpParamsDto" resultType="kr.co.trito.dto.Mybatis.comCode.ComCodeGrpListDto">
         SELECT *
           FROM(
             SELECT
                   ROWNUM AS rn
-                , CODE_GRP_ID
-                , CODE_GRP_NM
-                , CODE_GRP_ENG_NM
-                , CODE_GRP_DESC
-                , SORT_ORD
-                , USE_YN
-                , UPD_ID
-                , UPD_DATE
-                , REG_ID
-                , REG_DATE
+                , x.*
             FROM(
                 SELECT
                       CODE_GRP_ID
@@ -47,19 +40,213 @@
                 FROM TP_COMM_CODE_GRP
                 WHERE 1=1
                     <if test="comCodeGrpListParamsDto.searchOpt != null">
-                        AND ${searchOpt} LIKE CONCAT(CONCAT('%', #{comCodeGrpListParamsDto.searchTxt}), '%')
+                        AND ${comCodeGrpListParamsDto.searchOpt} LIKE CONCAT(CONCAT('%', #{comCodeGrpListParamsDto.searchTxt}), '%')
                     </if>
                     <if test="comCodeGrpListParamsDto.searchUseYn != null">
                         AND USE_YN = #{comCodeGrpListParamsDto.searchUseYn}
                     </if>
                 <if test="comCodeGrpListParamsDto.sortBy != null and comCodeGrpListParamsDto.descending == 'ac'">
-                    ORDER BY ${userListParamsDto.sortBy} ASC
+                    ORDER BY ${comCodeGrpListParamsDto.sortBy} ASC
                 </if>
                 <if test="comCodeGrpListParamsDto.sortBy != null and comCodeGrpListParamsDto.descending == 'dc'">
-                    ORDER BY ${userListParamsDto.sortBy} DESC
+                    ORDER BY ${comCodeGrpListParamsDto.sortBy} DESC
                 </if>
-            )
+            ) x
           )
         WHERE rn BETWEEN #{condition.start} AND #{condition.end}
     </select>
+
+    <!--  공통코드 그룹ID 중복 체크  -->
+    <select id="checkComCodeGrpId" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+          FROM TP_COMM_CODE_GRP
+         WHERE CODE_GRP_ID = #{codeGrpId}
+    </select>
+
+    <!--  공통코드 그룹 추가  -->
+    <insert id="addComCodeGrp" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeGrpAddModDto">
+        INSERT INTO TP_COMM_CODE_GRP
+        (
+              CODE_GRP_ID
+            , CODE_GRP_NM
+            , CODE_GRP_ENG_NM
+            , CODE_GRP_DESC
+            , SORT_ORD
+            , USE_YN
+            , REG_ID
+            , REG_DATE
+        )
+        VALUES
+        (
+              #{codeGrpId}
+            , #{codeGrpNm}
+            , #{codeGrpEngNm}
+            , #{codeGrpDesc}
+            , #{sortOrd}
+            , #{useYn}
+            , 'admin'
+            , SYSDATE
+        )
+    </insert>
+
+    <!--  공통코드 그룹 수정  -->
+    <update id="modComCodeGrp" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeGrpAddModDto">
+        UPDATE TP_COMM_CODE_GRP
+           SET
+                 CODE_GRP_NM = #{codeGrpNm}
+               , CODE_GRP_ENG_NM = #{codeGrpEngNm}
+               , CODE_GRP_DESC = #{codeGrpDesc}
+               , SORT_ORD = #{sortOrd}
+               , USE_YN = #{useYn}
+               , UPD_ID = 'admin2'
+               , UPD_DATE = SYSDATE
+         WHERE CODE_GRP_ID = #{codeGrpId}
+    </update>
+
+    <!--  공통코드 그룹 삭제  -->
+    <update id="delComCodeGrp" parameterType="java.util.List">
+        UPDATE TP_COMM_CODE_GRP
+           SET USE_YN = 'N'
+         WHERE CODE_GRP_ID IN
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+    </update>
+
+<!-- ======== 공통코드 관리 ======== -->
+    <!--  total rows  -->
+    <select id="selectCountCode" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeListParamDto" resultType="int">
+        SELECT COUNT(*)
+        FROM TP_COMM_CODE
+        WHERE 1=1
+        AND CODE_GRP_ID = #{selectedGrpId}
+        <if test="searchOpt != null">
+            AND ${searchOpt} LIKE CONCAT(CONCAT('%', #{searchTxt}), '%')
+        </if>
+        <if test="searchUseYn != null">
+            AND USE_YN = #{searchUseYn}
+        </if>
+    </select>
+
+    <!-- 공통코드 목록 조회 -->
+    <select id="getComCodeList" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeParamsDto" resultType="kr.co.trito.dto.Mybatis.comCode.ComCodeListDto">
+        SELECT *
+        FROM(
+            SELECT
+                  ROWNUM AS rn
+                , x.*
+            FROM(
+                SELECT
+                      CODE_ID
+                    , CODE_GRP_ID
+                    , CODE_NM
+                    , CODE_ENG_NM
+                    , UPP_CODE_ID
+                    , CODE_LVL
+                    , CODE_DESC
+                    , SORT_ODR
+                    , RESV1
+                    , RESV2
+                    , RESV3
+                    , USE_YN
+                    , UPD_ID
+                    , UPD_DATE
+                    , REG_ID
+                    , REG_DATE
+                FROM TP_COMM_CODE
+                WHERE 1=1
+                AND CODE_GRP_ID = #{comCodeListParamDto.selectedGrpId}
+                    <if test="comCodeListParamDto.searchOpt != null">
+                        AND ${comCodeListParamDto.searchOpt} LIKE CONCAT(CONCAT('%', #{comCodeListParamDto.searchTxt}), '%')
+                    </if>
+                    <if test="comCodeListParamDto.searchUseYn != null">
+                        AND USE_YN = #{comCodeListParamDto.searchUseYn}
+                    </if>
+                <if test="comCodeListParamDto.sortBy != null and comCodeListParamDto.descending == 'ac'">
+                    ORDER BY ${comCodeListParamDto.sortBy} ASC
+                </if>
+                <if test="comCodeListParamDto.sortBy != null and comCodeListParamDto.descending == 'dc'">
+                    ORDER BY ${comCodeListParamDto.sortBy} DESC
+                </if>
+            ) x
+        )
+        WHERE rn BETWEEN #{condition.start} AND #{condition.end}
+    </select>
+
+    <!--  공통코드 ID 중복 체크  -->
+    <select id="checkComCodeId" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeAddModDto" resultType="int">
+        SELECT COUNT(*)
+          FROM TP_COMM_CODE
+         WHERE CODE_GRP_ID = #{codeGrpId}
+           AND CODE_ID = #{codeId}
+    </select>
+
+    <!--  공통코드 추가  -->
+    <insert id="addComCode" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeAddModDto">
+        INSERT INTO TP_COMM_CODE
+        (
+              CODE_ID
+            , CODE_GRP_ID
+            , CODE_NM
+            , CODE_ENG_NM
+            , UPP_CODE_ID
+            , CODE_LVL
+            , CODE_DESC
+            , SORT_ODR
+            , RESV1
+            , RESV2
+            , RESV3
+            , USE_YN
+            , REG_ID
+            , REG_DATE
+        )
+        VALUES
+        (
+              #{codeId}
+            , #{codeGrpId}
+            , #{codeNm}
+            , #{codeEngNm}
+            , #{uppCodeId}
+            , #{codeLvl}
+            , #{codeDesc}
+            , #{sortOdr}
+            , #{resv1}
+            , #{resv2}
+            , #{resv3}
+            , #{useYn}
+            , 'admin'
+            , SYSDATE
+        )
+    </insert>
+
+    <!--  공통코드 수정  -->
+    <update id="modComCode" parameterType="kr.co.trito.dto.Mybatis.comCode.ComCodeAddModDto">
+        UPDATE TP_COMM_CODE
+           SET
+                  CODE_NM = #{codeNm}
+                , CODE_ENG_NM = #{codeEngNm}
+                , UPP_CODE_ID = #{uppCodeId}
+                , CODE_LVL = #{codeLvl}
+                , CODE_DESC = #{codeDesc}
+                , SORT_ODR = #{sortOdr}
+                , RESV1 = #{resv1}
+                , RESV2 = #{resv2}
+                , RESV3 = #{resv3}
+                , USE_YN = #{useYn}
+                , UPD_ID = 'admin2'
+                , UPD_DATE = SYSDATE
+         WHERE CODE_GRP_ID = #{codeGrpId}
+           AND CODE_ID = #{codeId}
+    </update>
+
+    <!--  공통코드 삭제  -->
+    <update id="delComCode" parameterType="object">
+        UPDATE TP_COMM_CODE
+        SET USE_YN = 'N'
+        WHERE CODE_GRP_ID = #{codeGrpId}
+          AND CODE_ID IN
+            <foreach collection="deleteItem" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+    </update>
 </mapper>

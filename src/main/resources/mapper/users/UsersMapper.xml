@@ -26,26 +26,13 @@
         FROM(
             SELECT
                 ROWNUM AS rn
-                , USER_ID
-                , USER_NM
-                , DEPT_CD AS deptNm
-                , JIKGYUB
-                , ROLE
-                , EMAIL
-                , TEL_NO
-                , GENDER
-                , USE_YN
-                , REG_ID
-                , REG_DATE
-                , UPT_ID
-                , UPT_DATE
+                , x.*
             FROM(
                 SELECT
                       USER_ID
                     , USER_NM
-                    , DEPT_CD
+                    , DEPT_CD AS deptNm
                     , JIKGYUB
-                    , ROLE
                     , EMAIL
                     , TEL_NO
                     , GENDER
@@ -71,7 +58,7 @@
                 <if test="userListParamsDto.sortBy != null and userListParamsDto.descending == 'dc'">
                     ORDER BY ${userListParamsDto.sortBy} DESC
                 </if>
-            )
+            ) x
         )
         WHERE rn BETWEEN #{condition.start} AND #{condition.end}
     </select>
@@ -84,54 +71,54 @@
     </select>
 
     <!--  유저 등록  -->
-    <insert id="addUser" parameterType="kr.co.trito.dto.Mybatis.users.UserAddMod">
+    <insert id="addUser" parameterType="kr.co.trito.dto.Mybatis.users.UserAddModDto">
         INSERT INTO TP_USER_INFO
         (
-          USER_ID
-        , USER_NM
-        , DEPT_CD
-        , JIKGYUB
-        , ROLE
-        , EMAIL
-        , TEL_NO
-        , GENDER
-        , USE_YN
-        , REG_ID
-        , REG_DATE
-        , PASSWORD
+              USER_ID
+            , USER_NM
+            , DEPT_CD
+            , JIKGYUB
+            , EMAIL
+            , TEL_NO
+            , GENDER
+            , USE_YN
+            , REG_ID
+            , REG_DATE
+            , PASSWORD
         )
         VALUES
         (
-          #{userId}
-        , #{userNm}
-        , #{deptNm}
-        , #{jikgyub}
-        , #{role}
-        , #{email}
-        , #{telNo}
-        , #{gender}
-        , #{useYn}
-        , 'admin'
-        , SYSDATE
-        , #{password}
+              #{userId}
+            , #{userNm}
+            , #{deptNm}
+            , #{jikgyub}
+            , #{email}
+            , #{telNo}
+            , #{gender}
+            , #{useYn}
+            , 'admin'
+            , SYSDATE
+            , #{password}
         )
     </insert>
 
     <!--  유저 수정  -->
-    <update id="modUser" parameterType="kr.co.trito.dto.Mybatis.users.UserAddMod">
+    <update id="modUser" parameterType="kr.co.trito.dto.Mybatis.users.UserAddModDto">
         UPDATE TP_USER_INFO
-        SET
-            USER_NM = #{userNm}
-            , DEPT_CD = #{deptNm}
-            , JIKGYUB = #{jikgyub}
-            , ROLE = #{role}
-            , EMAIL = #{email}
-            , TEL_NO = #{telNo}
-            , GENDER = #{gender}
-            , USE_YN = #{useYn}
-            , UPT_ID = 'admin2'
-            , UPT_DATE = SYSDATE
-        WHERE USER_ID = #{userId}
+           SET
+                 USER_NM = #{userNm}
+               , DEPT_CD = #{deptNm}
+               , JIKGYUB = #{jikgyub}
+               , EMAIL = #{email}
+               , TEL_NO = #{telNo}
+               , GENDER = #{gender}
+               , USE_YN = #{useYn}
+               , UPT_ID = 'admin2'
+               , UPT_DATE = SYSDATE
+            <if test="password != null and password != ''">
+                , PASSWORD = #{password}
+            </if>
+         WHERE USER_ID = #{userId}
     </update>
 
     <!--  사용자 삭제  -->

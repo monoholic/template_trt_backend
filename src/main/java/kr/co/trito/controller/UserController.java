@@ -2,7 +2,7 @@ package kr.co.trito.controller;
 
 import jakarta.validation.Valid;
 import kr.co.trito.domain.response.TritoResponse;
-import kr.co.trito.dto.Mybatis.users.UserAddMod;
+import kr.co.trito.dto.Mybatis.users.UserAddModDto;
 import kr.co.trito.dto.Mybatis.users.UserListParamsDto;
 import kr.co.trito.service.UserService;
 import lombok.AllArgsConstructor;
@@ -35,9 +35,9 @@ public class UserController {
     // 사용자 추가
     @PostMapping("/addMod")
     public ResponseEntity<TritoResponse<?>> addModUser(
-            @Valid @RequestBody UserAddMod userAddMod
+            @Valid @RequestBody UserAddModDto userAddModDto
     ){
-        return ResponseEntity.ok(new TritoResponse<>(userService.addModUser(userAddMod)));
+        return ResponseEntity.ok(new TritoResponse<>(userService.addModUser(userAddModDto)));
     }
 
     // 사용자 삭제

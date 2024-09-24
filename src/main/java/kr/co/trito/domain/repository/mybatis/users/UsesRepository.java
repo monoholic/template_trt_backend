@@ -1,6 +1,6 @@
 package kr.co.trito.domain.repository.mybatis.users;
 
-import kr.co.trito.dto.Mybatis.users.UserAddMod;
+import kr.co.trito.dto.Mybatis.users.UserAddModDto;
 import kr.co.trito.dto.Mybatis.users.UserListDto;
 import kr.co.trito.dto.Mybatis.users.UserListParamsDto;
 import kr.co.trito.dto.Mybatis.users.UserParmsDto;
@@ -21,10 +21,10 @@ public interface UsesRepository {
     int checkUserId(String userId);
 
     // 유저 등록
-    int addUser(UserAddMod userAddMod);
+    int addUser(UserAddModDto userAddModDto);
 
     // 유저 수정
-    int modUser(UserAddMod userAddMod);
+    int modUser(UserAddModDto userAddModDto);
 
     // 유저 삭제
     int delUser(List<String> params);

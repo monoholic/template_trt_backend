@@ -4,7 +4,7 @@ import kr.co.trito.utils.SearchCondition;
 import lombok.Data;
 
 @Data
-public class ComCodeGrpParmsDto {
-    private ComCodeGrpListParamsDto comCodeGrpListParamsDto;
+public class ComCodeParamsDto {
+    private ComCodeListParamDto comCodeListParamDto;
     private SearchCondition condition;
 }
