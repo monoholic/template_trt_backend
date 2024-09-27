@@ -38,17 +38,17 @@
                     , CAUSE
                 FROM WORKTIME_2020
                 WHERE 1=1
-                    <if test="ExcelListParamDto.sawonNo != null">
-                        AND SAWON_NO LIKE '%'|| #{ExcelListParamDto.sawonNo} ||'%'
+                    <if test="excelListParamDto.sawonNo != null">
+                        AND SAWON_NO LIKE '%'|| #{excelListParamDto.sawonNo} ||'%'
                     </if>
-                    <if test="ExcelListParamDto.sawonNm != null">
-                        AND SAWON_NM LIKE '%'|| #{ExcelListParamDto.sawonNm} ||'%'
+                    <if test="excelListParamDto.sawonNm != null">
+                        AND SAWON_NM LIKE '%'|| #{excelListParamDto.sawonNm} ||'%'
                     </if>
-                <if test="ExcelListParamDto.sortBy != null and ExcelListParamDto.descending == 'ac'">
-                    ORDER BY ${ExcelListParamDto.sortBy} ASC
+                <if test="excelListParamDto.sortBy != null and excelListParamDto.descending == 'ac'">
+                    ORDER BY ${excelListParamDto.sortBy} ASC
                 </if>
-                <if test="ExcelListParamDto.sortBy != null and ExcelListParamDto.descending == 'dc'">
-                    ORDER BY ${ExcelListParamDto.sortBy} DESC
+                <if test="excelListParamDto.sortBy != null and excelListParamDto.descending == 'dc'">
+                    ORDER BY ${excelListParamDto.sortBy} DESC
                 </if>
             )
         )

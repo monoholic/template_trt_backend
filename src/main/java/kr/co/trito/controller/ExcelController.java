@@ -30,6 +30,8 @@ public class ExcelController {
     public ResponseEntity<TritoResponse<?>> getExcelList(
             @Valid @RequestBody ExcelListParamDto excelListParamDto
     ) {
+        System.out.println("=================");
+        System.out.println(excelListParamDto);
         return ResponseEntity.ok(new TritoResponse<>(excelService.getExcelList(excelListParamDto)));
     }
 
