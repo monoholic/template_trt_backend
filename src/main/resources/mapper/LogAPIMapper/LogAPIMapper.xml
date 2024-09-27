@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.trito.domain.repository.mybatis.logAPI.LogAPIRepository">
+
+    <insert id="addLog" parameterType="string">
+        INSERT INTO TP_API_LOG
+        (
+              MENU_ID
+            , GUBUN
+            , GUBUN_DET
+            , SQL_TXT
+            , USER_ID
+            , ACCESS_TIME
+        )
+        VALUES
+        (
+              (SELECT MENU_NM FROM TP_COMM_MENU WHERE URL = REPLACE(#{pagePath}, '"', ''))
+            , '메뉴진입'
+            , NULL
+            , NULL
+            , 'userID'
+            , SYSDATE
+        )
+    </insert>
+</mapper>
