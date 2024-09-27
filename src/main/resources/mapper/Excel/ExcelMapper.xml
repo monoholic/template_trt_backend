@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.trito.domain.repository.mybatis.excel.ExcelTemRepository">
+
+    <!-- total rows -->
+    <select id="selectCountLog" parameterType="kr.co.trito.dto.Mybatis.excel.ExcelListParamDto" resultType="int">
+        SELECT COUNT(*)
+        FROM WORKTIME_2020
+        WHERE 1=1
+        <if test="sawonNo != null">
+            AND SAWON_NO LIKE '%'|| #{sawonNo} ||'%'
+        </if>
+        <if test="sawonNm != null">
+            AND SAWON_NM LIKE '%'|| #{sawonNm} ||'%'
+        </if>
+    </select>
+
+    <!-- 사용자 목록 조회 -->
+    <select id="getExcelList" parameterType="kr.co.trito.dto.Mybatis.excel.ExcelParamDto" resultType="kr.co.trito.dto.Mybatis.excel.ExcelListDto">
+        SELECT *
+        FROM(
+            SELECT
+                ROWNUM AS rn
+                , SAWON_NO
+                , SAWON_NM
+                , START_DATE
+                , START_TIME
+                , END_TIME
+                , CAUSE
+            FROM(
+                SELECT SAWON_NO
+                    , SAWON_NM
+                    , TO_CHAR(TO_DATE(START_DATE, 'YYYY-MM-DD'), 'YY/MM/DD') AS START_DATE
+                    , SUBSTR(START_TIME, 1, 2) || ':' || SUBSTR(START_TIME, 3, 2) || ':' || SUBSTR(START_TIME, 5, 2) AS START_TIME
+                    , SUBSTR(END_TIME, 1, 2) || ':' || SUBSTR(END_TIME, 3, 2) || ':' || SUBSTR(END_TIME, 5, 2) AS END_TIME
+                    , CAUSE
+                FROM WORKTIME_2020
+                WHERE 1=1
+                    <if test="ExcelListParamDto.sawonNo != null">
+                        AND SAWON_NO LIKE '%'|| #{ExcelListParamDto.sawonNo} ||'%'
+                    </if>
+                    <if test="ExcelListParamDto.sawonNm != null">
+                        AND SAWON_NM LIKE '%'|| #{ExcelListParamDto.sawonNm} ||'%'
+                    </if>
+                <if test="ExcelListParamDto.sortBy != null and ExcelListParamDto.descending == 'ac'">
+                    ORDER BY ${ExcelListParamDto.sortBy} ASC
+                </if>
+                <if test="ExcelListParamDto.sortBy != null and ExcelListParamDto.descending == 'dc'">
+                    ORDER BY ${ExcelListParamDto.sortBy} DESC
+                </if>
+            )
+        )
+        WHERE rn BETWEEN #{condition.start} AND #{condition.end}
+    </select>
+
+    <!-- excel upload -->
+    <update id="uploadExcel" parameterType="list">
+        <foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM DUAL" separator=" ">
+        INTO WORKTIME_2020
+        (
+        SAWON_NO
+        , SAWON_NM
+        , START_DATE
+        , START_TIME
+        , END_TIME
+        , CAUSE
+        )
+        VALUES
+        (
+        #{item.sawonNo}
+        , #{item.sawonNm}
+        , #{item.startDate}
+        , #{item.startTime}
+        , #{item.endTime}
+        , #{item.cause}
+        )
+        </foreach>
+    </update>
+
+
+    <!-- excel dowload -->
+    <select id="getDownList" parameterType="kr.co.trito.dto.Mybatis.excel.ExcelParamDto" resultType="kr.co.trito.dto.Mybatis.excel.ExcelListDto">
+        SELECT *
+        FROM(
+            SELECT
+                ROWNUM AS rn
+                , SAWON_NO
+                , SAWON_NM
+                , START_DATE
+                , START_TIME
+                , END_TIME
+                , CAUSE
+            FROM(
+                SELECT SAWON_NO
+                    , SAWON_NM
+                    , TO_CHAR(TO_DATE(START_DATE, 'YYYY-MM-DD'), 'YY/MM/DD') AS START_DATE
+                    , SUBSTR(START_TIME, 1, 2) || ':' || SUBSTR(START_TIME, 3, 2) || ':' || SUBSTR(START_TIME, 5, 2) AS START_TIME
+                    , SUBSTR(END_TIME, 1, 2) || ':' || SUBSTR(END_TIME, 3, 2) || ':' || SUBSTR(END_TIME, 5, 2) AS END_TIME
+                    , CAUSE
+                FROM WORKTIME_2020
+                WHERE 1=1
+                    <if test="excelListParamDto.sawonNo != null">
+                        AND SAWON_NO LIKE '%'|| #{excelListParamDto.sawonNo} ||'%'
+                    </if>
+                    <if test="excelListParamDto.sawonNm != null">
+                        AND SAWON_NM LIKE '%'|| #{excelListParamDto.sawonNm} ||'%'
+                    </if>
+            )
+        )
+    </select>
+
+</mapper>
