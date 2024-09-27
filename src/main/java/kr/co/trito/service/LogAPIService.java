@@ -13,6 +13,7 @@ public class LogAPIService {
     // 메뉴 진입시 로그 추가
     public long addLog(String pagePath) {
         int res = logAPIRepository.addLog(pagePath);
+
         return (long)res;
     }
 }
