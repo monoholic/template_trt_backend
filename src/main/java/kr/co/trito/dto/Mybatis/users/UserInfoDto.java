@@ -6,7 +6,8 @@ public record UserInfoDto(
         String deptCd,
         String jikgyub,
         String email,
-        String useYn,
-        String telNo
+        String telNo,
+        String useYn
+
 ) {
 }
