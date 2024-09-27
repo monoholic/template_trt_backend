@@ -1,10 +1,7 @@
 package kr.co.trito.config;
 
-import jakarta.servlet.http.HttpServletRequest;
-import kr.co.trito.jwt.CustomLogoutFilter;
-import kr.co.trito.jwt.JWTFilter;
-import kr.co.trito.jwt.JWTUtil;
-import kr.co.trito.jwt.LoginFilter;
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +16,11 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Collections;
+import jakarta.servlet.http.HttpServletRequest;
+import kr.co.trito.jwt.CustomLogoutFilter;
+import kr.co.trito.jwt.JWTFilter;
+import kr.co.trito.jwt.JWTUtil;
+import kr.co.trito.jwt.LoginFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -76,7 +77,7 @@ public class SecurityConfig {
         http.httpBasic((auth) -> auth.disable());
 
         http.authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join", "/userMng/**", "/comCode/**", "/roleMng/**", "/menu/**","/getUserInfo", "/logout", "/reissue", "/logManage/**").permitAll()
+                        .requestMatchers("/login", "/", "/join", "/userMng/**", "/comCode/**", "/roleMng/**", "/menu/**","/getUserInfo", "/logout", "/reissue", "/excel/**", "/logManage/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/reissue").permitAll()
                         .anyRequest().authenticated());
