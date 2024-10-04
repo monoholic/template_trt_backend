@@ -70,9 +70,9 @@ public class ReissueController {
 
 
         //response
+        response.setHeader("Access-Control-Expose-Headers", "access");
         response.setHeader("access", newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
-
         return new ResponseEntity<>(HttpStatus.OK);
 
     }

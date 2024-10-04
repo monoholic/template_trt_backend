@@ -59,7 +59,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refresh = jwtUtil.createJwt("refresh", userId, role, 864000000L);
 
         //응답 설정
-        response.setHeader("Access", access);
+        response.setHeader("Access-Control-Expose-Headers", "access");
+        response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
     }
