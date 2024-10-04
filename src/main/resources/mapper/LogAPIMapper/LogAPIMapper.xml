@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.trito.domain.repository.mybatis.logAPI.LogAPIRepository">
 
+    <!--  메뉴 진입시 로그 기록  -->
     <insert id="addLog" parameterType="string">
         INSERT INTO TP_API_LOG
         (
@@ -24,4 +25,84 @@
             , SYSDATE
         )
     </insert>
+
+    <!--  로그 API 리스트 count  -->
+    <select id="CountLogAPIList" parameterType="kr.co.trito.dto.Mybatis.logAPI.LogAPIListParamsDto" resultType="int">
+        SELECT COUNT(*)
+          FROM TP_API_LOG
+         WHERE 1=1
+        <![CDATA[
+           AND ACCESS_TIME >= #{dateFrom}
+           AND ACCESS_TIME < #{dateTo}
+        ]]>
+        <if test="userId != null">
+            AND USER_ID = #{userId}
+        </if>
+    </select>
+
+    <!--  로그 API 리스트 조회  -->
+    <select id="getLogAPIList" parameterType="kr.co.trito.dto.Mybatis.logAPI.LogAPIParamsDto" resultType="kr.co.trito.dto.Mybatis.logAPI.LogAPIListDto">
+        SELECT *
+          FROM (
+            SELECT
+                  ROWNUM AS rn
+                , x.*
+            FROM(
+                SELECT
+                      MENU_ID
+                    , GUBUN
+                    , GUBUN_DET
+                    , SQL_TXT
+                    , USER_ID
+                    , ACCESS_TIME
+                    , PARAMS
+                FROM TP_API_LOG
+                WHERE 1=1
+                <![CDATA[
+                  AND ACCESS_TIME >= #{logAPIListParamsDto.dateFrom}
+                  AND ACCESS_TIME < #{logAPIListParamsDto.dateTo}
+                ]]>
+                <if test="logAPIListParamsDto.userId != null">
+                    USER_ID = #{logAPIListParamsDto.userId}
+                </if>
+                <if test="logAPIListParamsDto.sortBy != null and logAPIListParamsDto.descending == 'ac'">
+                    ORDER BY ${logAPIListParamsDto.sortBy} ASC
+                </if>
+                <if test="logAPIListParamsDto.sortBy != null and logAPIListParamsDto.descending == 'dc'">
+                    ORDER BY ${logAPIListParamsDto.sortBy} DESC
+                </if>
+            ) x
+          )
+        WHERE rn BETWEEN #{condition.start} AND #{condition.end}
+    </select>
+
+    <!--  로그 SQL문 삽입  -->
+    <insert id="addSql" parameterType="map">
+        INSERT INTO TP_API_LOG
+        (
+              MENU_ID
+            , GUBUN
+            , GUBUN_DET
+            , USER_ID
+            , ACCESS_TIME
+            , SQL_TXT
+            , PARAMS
+        )
+        VALUES
+        (
+              'SQL실행'
+            , '기능'
+            <if test="preStrSQL == 'INSERT'">
+                , '추가'
+            </if>
+            <if test="preStrSQL == 'UPDATE'">
+                , '업데이트'
+            </if>
+            , 'SQL테스터'
+            , SYSDATE
+            , #{originalSql}
+            , #{param}
+        )
+    </insert>
+
 </mapper>

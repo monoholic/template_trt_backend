@@ -1,6 +1,7 @@
 package kr.co.trito.config;
 
 
+import kr.co.trito.utils.MybatisInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -37,6 +38,8 @@ public class MyBatisConfig {
         sqlSessionFactoryBean.setMapperLocations(
         applicationContext.getResources("classpath:/mapper/**/*.xml"));
 		sqlSessionFactoryBean.setDataSource(dataSource);
+        // 로그 인터셉터
+        sqlSessionFactoryBean.setPlugins(mybatisInterceptor());
         return sqlSessionFactoryBean.getObject();
     }
 
@@ -48,5 +51,11 @@ public class MyBatisConfig {
     @Bean(name="sqlSessionTemplate")
     public SqlSessionTemplate sqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
+    }
+
+    // 로그 인터셉터
+    @Bean
+    public MybatisInterceptor mybatisInterceptor(){
+        return new MybatisInterceptor();
     }
 }

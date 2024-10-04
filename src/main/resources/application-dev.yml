@@ -36,4 +36,5 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: kr.co.trito.domain.repository.mybatis
 
