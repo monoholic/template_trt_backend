@@ -11,7 +11,7 @@
         SELECT COUNT(*)
           FROM TP_COM_ROLE
          WHERE 1=1
-        <if test="searchOpt != null">
+        <if test="searchOpt != null and searchTxt != null and searchTxt != ''">
             AND ${searchOpt} LIKE CONCAT(CONCAT('%', #{searchTxt}), '%')
         </if>
         <if test="searchUseYn != null">
@@ -38,7 +38,7 @@
                     , REG_DATE
                 FROM TP_COM_ROLE
                 WHERE 1=1
-                <if test="roleListParamsDto.searchOpt != null">
+                <if test="roleListParamsDto.searchOpt != null and roleListParamsDto.searchTxt != null and roleListParamsDto.searchTxt != ''">
                     AND ${roleListParamsDto.searchOpt} LIKE CONCAT(CONCAT('%', #{roleListParamsDto.searchTxt}), '%')
                 </if>
                 <if test="roleListParamsDto.searchUseYn != null">
@@ -49,6 +49,9 @@
                 </if>
                 <if test="roleListParamsDto.sortBy != null and roleListParamsDto.descending == 'dc'">
                     ORDER BY ${roleListParamsDto.sortBy} DESC
+                </if>
+                <if test="roleListParamsDto.sortBy == null">
+                    ORDER BY ROLE_ID ASC
                 </if>
             ) x
           )
@@ -114,7 +117,7 @@
           FROM TP_USER_ROLE
          WHERE 1=1
             AND ROLE_ID = #{selectedRoleId}
-            <if test="searchTxt != null">
+            <if test="searchTxt != null and searchTxt != null and searchTxt != ''">
                 AND USER_ID LIKE CONCAT(CONCAT('%', #{searchTxt}), '%')
             </if>
             <if test="searchUseYn != null">
@@ -141,7 +144,7 @@
                 FROM TP_USER_ROLE
                 WHERE 1=1
                 AND ROLE_ID = #{userRoleListParamsDto.selectedRoleId}
-                <if test="userRoleListParamsDto.searchTxt != null">
+                <if test="userRoleListParamsDto.searchTxt != null and userRoleListParamsDto.searchTxt != null and userRoleListParamsDto.searchTxt != ''">
                     AND USER_ID LIKE CONCAT(CONCAT('%', #{userRoleListParamsDto.searchTxt}), '%')
                 </if>
                 <if test="userRoleListParamsDto.searchUseYn != null">
@@ -152,6 +155,9 @@
                 </if>
                 <if test="userRoleListParamsDto.sortBy != null and userRoleListParamsDto.descending == 'dc'">
                     ORDER BY ${userRoleListParamsDto.sortBy} DESC
+                </if>
+                <if test="userRoleListParamsDto.sortBy == null">
+                    ORDER BY USER_ID ASC
                 </if>
             ) x
         )

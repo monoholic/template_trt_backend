@@ -23,16 +23,9 @@ public class MybatisInterceptor implements Interceptor {
     @Lazy
     private LogAPIRepository logAPIRepository;
 
-    // ThreadLocal 변수를 사용하여 현재 인터셉터가 동작 중인지 여부를 확인
-    private static final ThreadLocal<Boolean> isInserting = ThreadLocal.withInitial(() -> false);
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-
-        // 이미 SQL 삽입 작업 중이라면 바로 기존 동작을 진행하도록 처리
-        if (isInserting.get()) {
-            return invocation.proceed();
-        }
 
         // 쿼리 실행 전 처리할 작업
         // sql문
@@ -68,18 +61,11 @@ public class MybatisInterceptor implements Interceptor {
             params.put("originalSql", originalSql);
             params.put("param", param);
 
-            // 무한반복 방지 플래그 설정
-            isInserting.set(true);
-            try {
-                // SQL을 DB에 저장하는 로직(조회 제외)
-                int res = logAPIRepository.addSql(params);
+            // SQL을 DB에 저장하는 로직(조회 제외)
+            int res = logAPIRepository.addSql(params);
 
-                // 원래 SQL 실행
-                return invocation.proceed();
-            } finally {
-                // 작업 완료 후 플래그 해제
-                isInserting.set(false);
-            }
+            // 원래 SQL 실행
+            return invocation.proceed();
         } else {
             // 원래 SQL 실행
             return invocation.proceed();

@@ -11,18 +11,20 @@
               MENU_ID
             , GUBUN
             , GUBUN_DET
-            , SQL_TXT
             , USER_ID
             , ACCESS_TIME
+            , SQL_TXT
+            , PARAMS
         )
         VALUES
         (
               (SELECT MENU_NM FROM TP_COMM_MENU WHERE URL = REPLACE(#{pagePath}, '"', ''))
             , '메뉴진입'
-            , NULL
-            , NULL
+            , '-'
             , 'userID'
             , SYSDATE
+            , '-'
+            , '-'
         )
     </insert>
 
@@ -35,7 +37,7 @@
            AND ACCESS_TIME >= #{dateFrom}
            AND ACCESS_TIME < #{dateTo}
         ]]>
-        <if test="userId != null">
+        <if test="userId != null and userId != ''">
             AND USER_ID = #{userId}
         </if>
     </select>
@@ -62,14 +64,17 @@
                   AND ACCESS_TIME >= #{logAPIListParamsDto.dateFrom}
                   AND ACCESS_TIME < #{logAPIListParamsDto.dateTo}
                 ]]>
-                <if test="logAPIListParamsDto.userId != null">
-                    USER_ID = #{logAPIListParamsDto.userId}
+                <if test="logAPIListParamsDto.userId != null and logAPIListParamsDto.userId != ''">
+                   AND USER_ID = #{logAPIListParamsDto.userId}
                 </if>
                 <if test="logAPIListParamsDto.sortBy != null and logAPIListParamsDto.descending == 'ac'">
                     ORDER BY ${logAPIListParamsDto.sortBy} ASC
                 </if>
                 <if test="logAPIListParamsDto.sortBy != null and logAPIListParamsDto.descending == 'dc'">
                     ORDER BY ${logAPIListParamsDto.sortBy} DESC
+                </if>
+                <if test="logAPIListParamsDto.sortBy == null">
+                    ORDER BY ACCESS_TIME DESC
                 </if>
             ) x
           )

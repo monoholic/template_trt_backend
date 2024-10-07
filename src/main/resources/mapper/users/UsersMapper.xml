@@ -9,10 +9,10 @@
         SELECT COUNT(*)
         FROM TP_USER_INFO
         WHERE 1=1
-        <if test="userId != null">
+        <if test="userId != null and userId != ''">
             AND USER_ID LIKE CONCAT(CONCAT('%', #{userId}), '%')
         </if>
-        <if test="userNm != null">
+        <if test="userNm != null and userNm != ''">
             AND USER_NM LIKE CONCAT(CONCAT('%', #{userNm}), '%')
         </if>
         <if test="useYn != null">
@@ -43,10 +43,10 @@
                     , TO_CHAR(UPT_DATE, 'YYYY-MM-DD') AS UPT_DATE
                 FROM TP_USER_INFO
                 WHERE 1=1
-                    <if test="userListParamsDto.userId != null">
+                    <if test="userListParamsDto.userId != null and userListParamsDto.userId != ''">
                         AND USER_ID LIKE CONCAT(CONCAT('%', #{userListParamsDto.userId}), '%')
                     </if>
-                    <if test="userListParamsDto.userNm != null">
+                    <if test="userListParamsDto.userNm != null and userListParamsDto.userNm != ''">
                         AND USER_NM LIKE CONCAT(CONCAT('%', #{userListParamsDto.userNm}), '%')
                     </if>
                     <if test="userListParamsDto.useYn != null">
@@ -57,6 +57,9 @@
                 </if>
                 <if test="userListParamsDto.sortBy != null and userListParamsDto.descending == 'dc'">
                     ORDER BY ${userListParamsDto.sortBy} DESC
+                </if>
+                <if test="userListParamsDto.sortBy == null">
+                    ORDER BY USER_ID ASC
                 </if>
             ) x
         )
@@ -90,11 +93,11 @@
         (
               #{userId}
             , #{userNm}
-            , #{deptNm}
-            , #{jikgyub}
-            , #{email}
-            , #{telNo}
-            , #{gender}
+            , NVL(#{deptNm}, '-')
+            , NVL(#{jikgyub}, '-')
+            , NVL(#{email}, '-')
+            , NVL(#{telNo}, '-')
+            , NVL(#{gender}, '-')
             , #{useYn}
             , 'admin'
             , SYSDATE
@@ -108,10 +111,10 @@
            SET
                  USER_NM = #{userNm}
                , DEPT_CD = #{deptNm}
-               , JIKGYUB = #{jikgyub}
-               , EMAIL = #{email}
-               , TEL_NO = #{telNo}
-               , GENDER = #{gender}
+               , JIKGYUB = NVL(#{jikgyub}, '-')
+               , EMAIL = NVL(#{email}, '-')
+               , TEL_NO = NVL(#{telNo}, '-')
+               , GENDER = NVL(#{gender}, '-')
                , USE_YN = #{useYn}
                , UPT_ID = 'admin2'
                , UPT_DATE = SYSDATE

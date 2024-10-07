@@ -10,7 +10,7 @@
         SELECT COUNT(*)
         FROM TP_COMM_CODE_GRP
         WHERE 1=1
-        <if test="searchOpt != null">
+        <if test="searchOpt != null and searchTxt != null and searchTxt != ''">
             AND ${searchOpt} LIKE CONCAT(CONCAT('%', #{searchTxt}), '%')
         </if>
         <if test="searchUseYn != null">
@@ -39,7 +39,7 @@
                     , REG_DATE
                 FROM TP_COMM_CODE_GRP
                 WHERE 1=1
-                    <if test="comCodeGrpListParamsDto.searchOpt != null">
+                    <if test="comCodeGrpListParamsDto.searchOpt != null and comCodeGrpListParamsDto.searchTxt != null and comCodeGrpListParamsDto.searchTxt != ''">
                         AND ${comCodeGrpListParamsDto.searchOpt} LIKE CONCAT(CONCAT('%', #{comCodeGrpListParamsDto.searchTxt}), '%')
                     </if>
                     <if test="comCodeGrpListParamsDto.searchUseYn != null">
@@ -50,6 +50,9 @@
                 </if>
                 <if test="comCodeGrpListParamsDto.sortBy != null and comCodeGrpListParamsDto.descending == 'dc'">
                     ORDER BY ${comCodeGrpListParamsDto.sortBy} DESC
+                </if>
+                <if test="comCodeGrpListParamsDto.sortBy == null">
+                    ORDER BY CODE_GRP_ID ASC
                 </if>
             ) x
           )
@@ -81,8 +84,8 @@
               #{codeGrpId}
             , #{codeGrpNm}
             , #{codeGrpEngNm}
-            , #{codeGrpDesc}
-            , #{sortOrd}
+            , NVL(#{codeGrpDesc}, '-')
+            , NVL(#{sortOrd}, 1)
             , #{useYn}
             , 'admin'
             , SYSDATE
@@ -95,8 +98,8 @@
            SET
                  CODE_GRP_NM = #{codeGrpNm}
                , CODE_GRP_ENG_NM = #{codeGrpEngNm}
-               , CODE_GRP_DESC = #{codeGrpDesc}
-               , SORT_ORD = #{sortOrd}
+               , CODE_GRP_DESC = NVL(#{codeGrpDesc}, '-')
+               , SORT_ORD = NVL(#{sortOrd}, 1)
                , USE_YN = #{useYn}
                , UPD_ID = 'admin2'
                , UPD_DATE = SYSDATE
@@ -120,7 +123,7 @@
         FROM TP_COMM_CODE
         WHERE 1=1
         AND CODE_GRP_ID = #{selectedGrpId}
-        <if test="searchOpt != null">
+        <if test="searchOpt != null and searchTxt != null and searchTxt != ''">
             AND ${searchOpt} LIKE CONCAT(CONCAT('%', #{searchTxt}), '%')
         </if>
         <if test="searchUseYn != null">
@@ -156,7 +159,7 @@
                 FROM TP_COMM_CODE
                 WHERE 1=1
                 AND CODE_GRP_ID = #{comCodeListParamDto.selectedGrpId}
-                    <if test="comCodeListParamDto.searchOpt != null">
+                    <if test="comCodeListParamDto.searchOpt != null and comCodeListParamDto.searchTxt != null and comCodeListParamDto.searchTxt != ''">
                         AND ${comCodeListParamDto.searchOpt} LIKE CONCAT(CONCAT('%', #{comCodeListParamDto.searchTxt}), '%')
                     </if>
                     <if test="comCodeListParamDto.searchUseYn != null">
@@ -167,6 +170,9 @@
                 </if>
                 <if test="comCodeListParamDto.sortBy != null and comCodeListParamDto.descending == 'dc'">
                     ORDER BY ${comCodeListParamDto.sortBy} DESC
+                </if>
+                <if test="comCodeListParamDto.sortBy == null">
+                    ORDER BY CODE_ID ASC
                 </if>
             ) x
         )
@@ -206,13 +212,13 @@
             , #{codeGrpId}
             , #{codeNm}
             , #{codeEngNm}
-            , #{uppCodeId}
-            , #{codeLvl}
-            , #{codeDesc}
-            , #{sortOdr}
-            , #{resv1}
-            , #{resv2}
-            , #{resv3}
+            , NVL(#{uppCodeId}, '-')
+            , NVL(#{codeLvl}, '-')
+            , NVL(#{codeDesc}, '-')
+            , NVL(#{sortOdr}, 1)
+            , NVL(#{resv1}, '-')
+            , NVL(#{resv2}, '-')
+            , NVL(#{resv3}, '-')
             , #{useYn}
             , 'admin'
             , SYSDATE
@@ -225,13 +231,13 @@
            SET
                   CODE_NM = #{codeNm}
                 , CODE_ENG_NM = #{codeEngNm}
-                , UPP_CODE_ID = #{uppCodeId}
-                , CODE_LVL = #{codeLvl}
-                , CODE_DESC = #{codeDesc}
-                , SORT_ODR = #{sortOdr}
-                , RESV1 = #{resv1}
-                , RESV2 = #{resv2}
-                , RESV3 = #{resv3}
+                , UPP_CODE_ID = NVL(#{uppCodeId}, '-')
+                , CODE_LVL = NVL(#{codeLvl}, '-')
+                , CODE_DESC = NVL(#{codeDesc}, '-')
+                , SORT_ODR = NVL(#{sortOdr}, 1)
+                , RESV1 = NVL(#{resv1}, '-')
+                , RESV2 = NVL(#{resv2}, '-')
+                , RESV3 = NVL(#{resv3}, '-')
                 , USE_YN = #{useYn}
                 , UPD_ID = 'admin2'
                 , UPD_DATE = SYSDATE
