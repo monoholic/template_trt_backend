@@ -64,20 +64,31 @@ public class ExcelService {
             DataFormatter formatter = new DataFormatter();
             
             for (org.apache.poi.ss.usermodel.Row row : sheet) {
+                if(row.getRowNum() != 0) {
+                    ExcelUpListDto data = new ExcelUpListDto();
                 
-                ExcelUpListDto data = new ExcelUpListDto();
-                
-                data.setSawonNo(formatter.formatCellValue(row.getCell(0)));
-                data.setSawonNm(row.getCell(1).getStringCellValue());
-                data.setStartDate(formatter.formatCellValue(row.getCell(2)));
-                data.setStartTime(formatter.formatCellValue(row.getCell(3)));
-                data.setEndTime(formatter.formatCellValue(row.getCell(4)));
-                data.setCause(row.getCell(5).getStringCellValue());
-                
-                dataList.add(data);
+                    data.setSawonNo(formatter.formatCellValue(row.getCell(0)));
+                    data.setSawonNm(row.getCell(1).getStringCellValue());
+                    data.setStartDate(formatter.formatCellValue(row.getCell(2)));
+                    data.setStartTime(formatter.formatCellValue(row.getCell(3)));
+                    data.setEndTime(formatter.formatCellValue(row.getCell(4)));
+                    data.setCause(row.getCell(5).getStringCellValue());
+
+                    if(data.getSawonNo() == "" || data.getSawonNo().length() != 7){
+                        throw new IOException("사원 넘버가 유효하지 않습니다.");
+                    }
+                    if(data.getStartDate().length() != 8){
+                        throw new IOException("날짜가 8자리가 아닙니다.");
+                    }
+                    if(data.getStartTime().length() != 6 || data.getEndTime().length() != 6){
+                        throw new IOException("출퇴근 시간이 6자리가 아닙니다.");
+                    }
+                    
+                    dataList.add(data);
+                }
             }
 
-            dataList.remove(0);
+            //dataList.remove(0);
 
             excelTemRepository.uploadExcel(dataList);
         }
