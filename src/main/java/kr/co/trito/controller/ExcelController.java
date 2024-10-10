@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import io.jsonwebtoken.io.IOException;
 import jakarta.validation.Valid;
 import kr.co.trito.domain.response.TritoResponse;
 import kr.co.trito.dto.Mybatis.excel.ExcelListParamDto;
+import kr.co.trito.exception.ExcelException;
 import kr.co.trito.service.ExcelService;
 import lombok.AllArgsConstructor;
 
@@ -30,19 +30,17 @@ public class ExcelController {
     public ResponseEntity<TritoResponse<?>> getExcelList(
             @Valid @RequestBody ExcelListParamDto excelListParamDto
     ) {
-        System.out.println("=================");
-        System.out.println(excelListParamDto);
         return ResponseEntity.ok(new TritoResponse<>(excelService.getExcelList(excelListParamDto)));
     }
 
     // excel upload
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) throws java.io.IOException {
+    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) throws java.io.IOException, ExcelException {
         try {
             excelService.uploadExcelFile(file);
             return ResponseEntity.ok("Data uploaded successfully");
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading data");
+        } catch (ExcelException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

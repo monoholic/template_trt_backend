@@ -1,5 +1,7 @@
 package kr.co.trito.service;
 
+import static kr.co.trito.enums.ExcelErrorCode.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import kr.co.trito.dto.Mybatis.excel.ExcelListDto;
 import kr.co.trito.dto.Mybatis.excel.ExcelListParamDto;
 import kr.co.trito.dto.Mybatis.excel.ExcelParamDto;
 import kr.co.trito.dto.Mybatis.excel.ExcelUpListDto;
+import kr.co.trito.exception.ExcelException;
 import kr.co.trito.utils.SearchCondition;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class ExcelService {
+
     @Autowired
     private final ExcelTemRepository excelTemRepository;
         
@@ -56,7 +60,7 @@ public class ExcelService {
     }
 
     // excel upload
-    public void uploadExcelFile(MultipartFile file) throws IOException {
+    public void uploadExcelFile(MultipartFile file) throws IOException,  ExcelException{
 
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(0);
@@ -74,16 +78,13 @@ public class ExcelService {
                     data.setEndTime(formatter.formatCellValue(row.getCell(4)));
                     data.setCause(row.getCell(5).getStringCellValue());
 
-                    if(data.getSawonNo() == "" || data.getSawonNo().length() != 7){
-                        throw new IOException("사원 넘버가 유효하지 않습니다.");
+                    if(data.getSawonNo() == "" ){
+                        throw new ExcelException(EXCEL_DATA_NULL);
                     }
-                    if(data.getStartDate().length() != 8){
-                        throw new IOException("날짜가 8자리가 아닙니다.");
+                    if(data.getStartDate().length() != 8 || data.getSawonNo().length() != 7 || data.getStartTime().length() != 6 || data.getEndTime().length() != 6){
+                        throw new ExcelException(EXCEL_DATA_LENGTH);
                     }
-                    if(data.getStartTime().length() != 6 || data.getEndTime().length() != 6){
-                        throw new IOException("출퇴근 시간이 6자리가 아닙니다.");
-                    }
-                    
+
                     dataList.add(data);
                 }
             }
