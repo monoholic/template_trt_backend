@@ -51,6 +51,7 @@ public class MybatisInterceptor implements Interceptor {
 
             String param = "";
             for(String key: map.keySet()){
+                if(key.equals("list") || key.equals("collection")) continue;
                 if(map.get(key) != null){
                     param += key + "=" + map.get(key) + ", ";
                 }

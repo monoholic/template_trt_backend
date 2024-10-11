@@ -110,7 +110,7 @@
         UPDATE TP_USER_INFO
            SET
                  USER_NM = #{userNm}
-               , DEPT_CD = #{deptNm}
+               , DEPT_CD = NVL(#{deptNm}, '-')
                , JIKGYUB = NVL(#{jikgyub}, '-')
                , EMAIL = NVL(#{email}, '-')
                , TEL_NO = NVL(#{telNo}, '-')
