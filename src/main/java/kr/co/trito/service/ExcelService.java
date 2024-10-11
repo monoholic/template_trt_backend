@@ -81,8 +81,11 @@ public class ExcelService {
                     if(data.getSawonNo() == "" ){
                         throw new ExcelException(EXCEL_DATA_NULL);
                     }
-                    if(data.getStartDate().length() != 8 || data.getSawonNo().length() != 7 || data.getStartTime().length() != 6 || data.getEndTime().length() != 6){
+                    if(data.getSawonNo().length() != 7 || data.getStartDate().length() != 8 || data.getStartTime().length() != 6 || data.getEndTime().length() != 6){
                         throw new ExcelException(EXCEL_DATA_LENGTH);
+                    }
+                    if(!data.getSawonNo().matches("\\d+") || !data.getStartDate().matches("\\d+") || !data.getStartTime().matches("\\d+") || !data.getEndTime().matches("\\d+")){
+                        throw new ExcelException(EXCEL_DATA_TYPE_ERROR);
                     }
 
                     dataList.add(data);
