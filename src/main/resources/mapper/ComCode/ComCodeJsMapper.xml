@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.trito.domain.repository.mybatis.comCodeJs.ComCodeJsRepository">
+    <select id="getComCodeJsOpt" parameterType="string" resultType="kr.co.trito.dto.Mybatis.comCode.ComCodeListDto">
+        SELECT
+              CODE_ID
+            , CODE_GRP_ID
+            , CODE_NM
+            , CODE_ENG_NM
+            , UPP_CODE_ID
+            , CODE_LVL
+            , CODE_DESC
+            , SORT_ODR
+            , USE_YN
+            , RESV1
+            , RESV2
+            , RESV3
+          FROM TP_COMM_CODE
+         WHERE CODE_GRP_ID = REPLACE(#{codeGrpId}, '"', '')
+    </select>
+</mapper>

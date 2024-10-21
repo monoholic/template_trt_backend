@@ -32,18 +32,13 @@ public class MybatisInterceptor implements Interceptor {
         StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
         String originalSql = statementHandler.getBoundSql().getSql();
 
-        // 로그 추가 SQL문을 제외하기 위한 조건
-        if (originalSql.contains("INSERT INTO TP_API_LOG")) {
-            // 로그 추가 SQL문이라면 바로 실행
-            return invocation.proceed();
-        }
-
         // 상세구분
         int idx = originalSql.indexOf(" ");
         String preStrSQL = originalSql.substring(0, idx);
 
-        // 조회의 경우 로그 기록 X
-        if(!preStrSQL.equals("SELECT")) {
+
+        // 조회의 경우 로그 기록 X 또는 로그 추가 SQL문을 제외
+        if(!preStrSQL.trim().equals("SELECT") && !originalSql.contains("INSERT INTO TP_API_LOG")) {
             // 파라미터
             Object paramList = statementHandler.getParameterHandler().getParameterObject();
             ObjectMapper objectMapper = new ObjectMapper();

@@ -22,25 +22,25 @@
 
     <!-- 사용자 목록 조회 -->
     <select id="getUserList" parameterType="kr.co.trito.dto.Mybatis.users.UserParmsDto" resultType="kr.co.trito.dto.Mybatis.users.UserListDto">
-        SELECT *
+        SELECT
+              USER_ID
+            , USER_NM
+            , DEPT_CD AS deptNm
+            , (SELECT CODE_NM FROM TP_COMM_CODE WHERE CODE_GRP_ID = 'USER_CLPST' AND CODE_ID = JIKGYUB) AS JIKGYUB
+            , EMAIL
+            , TEL_NO
+            , GENDER
+            , USE_YN
+            , REG_ID
+            , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE
+            , UPT_ID
+            , TO_CHAR(UPT_DATE, 'YYYY-MM-DD') AS UPT_DATE
         FROM(
             SELECT
                 ROWNUM AS rn
                 , x.*
             FROM(
-                SELECT
-                      USER_ID
-                    , USER_NM
-                    , DEPT_CD AS deptNm
-                    , JIKGYUB
-                    , EMAIL
-                    , TEL_NO
-                    , GENDER
-                    , USE_YN
-                    , REG_ID
-                    , TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE
-                    , UPT_ID
-                    , TO_CHAR(UPT_DATE, 'YYYY-MM-DD') AS UPT_DATE
+                SELECT *
                 FROM TP_USER_INFO
                 WHERE 1=1
                     <if test="userListParamsDto.userId != null and userListParamsDto.userId != ''">
@@ -94,7 +94,7 @@
               #{userId}
             , #{userNm}
             , NVL(#{deptNm}, '-')
-            , NVL(#{jikgyub}, '-')
+            , NVL(#{jikgyub}, '90')
             , NVL(#{email}, '-')
             , NVL(#{telNo}, '-')
             , NVL(#{gender}, '-')
@@ -111,7 +111,7 @@
            SET
                  USER_NM = #{userNm}
                , DEPT_CD = NVL(#{deptNm}, '-')
-               , JIKGYUB = NVL(#{jikgyub}, '-')
+               , JIKGYUB = NVL(#{jikgyub}, '90')
                , EMAIL = NVL(#{email}, '-')
                , TEL_NO = NVL(#{telNo}, '-')
                , GENDER = NVL(#{gender}, '-')
