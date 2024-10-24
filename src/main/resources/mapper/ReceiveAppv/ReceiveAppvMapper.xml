@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.trito.domain.repository.mybatis.receiveAppv.ReceiveAppvRepository">
+
+<!-- total rows -->
+<select id="selectCountLog" parameterType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListParamDto" resultType="int">
+    SELECT COUNT(*)
+    FROM TP_COMM_APPV
+    WHERE 1=1
+    <if test="updNm != null">
+        AND (SELECT USER_NM FROM TP_USER_INFO WHERE USER_ID = UPD_ID) LIKE '%'|| #{updNm} ||'%'
+    </if>
+    <if test="appvType != null">
+        AND APPV_TYPE LIKE '%'|| #{appvType} ||'%'
+    </if>
+</select>
+
+<!-- 결재 목록 조회 -->
+<select id="getReceiveAppvList" parameterType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvParamDto" resultType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto">
+    SELECT *
+    FROM(
+        SELECT
+            ROWNUM AS rn
+            , APPV_ID
+            , APPV_USER_ID
+            , (SELECT USER_NM FROM TP_USER_INFO A WHERE A.USER_ID = B.APPV_USER_ID) APPV_USER_NM
+            , APPV_TYPE
+            , APPV_TTL
+            , APPV_CN
+            , APPV_STUS
+            , APPV_STEP
+            , DEL_YN
+            , UPD_ID
+            , (SELECT USER_NM FROM TP_USER_INFO A WHERE A.USER_ID = B.UPD_ID) UPD_NM
+            , TO_CHAR(UPD_DATE, 'YY/MM/DD') UPD_DATE
+            , REG_ID
+            , (SELECT REG_ID FROM TP_USER_INFO A WHERE A.USER_ID = B.REG_ID) REG_NM
+            , TO_CHAR((SELECT REG_DATE FROM TP_USER_INFO A WHERE A.USER_ID = B.REG_ID), 'YYYY/MM/DD') REG_DATE
+        FROM TP_COMM_APPV B
+        WHERE 1=1
+            <if test="receiveAppvListParamDto.updNm != null">
+                AND (SELECT USER_NM FROM TP_USER_INFO WHERE USER_ID = UPD_ID) LIKE '%'|| #{receiveAppvListParamDto.updNm} ||'%'
+            </if>
+            <if test="receiveAppvListParamDto.appvType != null">
+                AND APPV_TYPE LIKE '%'|| #{receiveAppvListParamDto.appvType} ||'%'
+            </if>
+        <if test="receiveAppvListParamDto.sortBy != null and receiveAppvListParamDto.descending == 'ac'">
+            ORDER BY ${receiveAppvListParamDto.sortBy} ASC
+        </if>
+        <if test="receiveAppvListParamDto.sortBy != null and receiveAppvListParamDto.descending == 'dc'">
+            ORDER BY ${receiveAppvListParamDto.sortBy} DESC
+        </if>
+        )
+    WHERE rn BETWEEN #{condition.start} AND #{condition.end}
+</select>
+
+<!-- 결재 분류 조회 -->
+ <select id="getTypeList" resultType="ReceiveAppvListDto">
+    SELECT DISTINCT APPV_TYPE FROM TP_COMM_APPV ORDER BY APPV_TYPE
+ </select>
+
+ <!-- 승인 담당자 조회 -->
+ <select id="getUserList" resultType="ReceiveAppvUserListDto">
+    SELECT USER_ID, USER_NM FROM TP_USER_INFO
+ </select>
+
+ <!-- 결재 작성(추가) -->
+ <insert id="addApproval" parameterType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto">
+    INSERT INTO	TP_COMM_APPV 
+        (APPV_ID, APPV_USER_ID, APPV_TYPE, APPV_TTL, APPV_CN
+        , APPV_STUS, APPV_STEP, DEL_YN, UPD_ID, UPD_DATE, REG_ID, REG_DATE)
+    VALUES 
+        (#{appvId}, #{appvUserId}, #{appvType}, #{appvTtl}, #{appvCn}
+        , #{appvStus}, #{appvStep}, #{delYn}, #{updId}, SYSDATE, #{regId}
+        , (SELECT REG_DATE FROM	TP_USER_INFO WHERE REG_ID = #{regId}))
+ </insert>
+</mapper>
