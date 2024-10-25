@@ -57,23 +57,29 @@
 </select>
 
 <!-- 결재 분류 조회 -->
- <select id="getTypeList" resultType="ReceiveAppvListDto">
+<select id="getTypeList" resultType="ReceiveAppvListDto">
     SELECT DISTINCT APPV_TYPE FROM TP_COMM_APPV ORDER BY APPV_TYPE
- </select>
+</select>
 
- <!-- 승인 담당자 조회 -->
- <select id="getUserList" resultType="ReceiveAppvUserListDto">
+<!-- 승인 담당자 조회 -->
+<select id="getUserList" resultType="ReceiveAppvUserListDto">
     SELECT USER_ID, USER_NM FROM TP_USER_INFO
- </select>
+</select>
 
- <!-- 결재 작성(추가) -->
- <insert id="addApproval" parameterType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto">
-    INSERT INTO	TP_COMM_APPV 
+<!-- 결재 작성(추가) -->
+<insert id="addApproval" parameterType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto">
+    INSERT INTO	TP_COMM_APPV
         (APPV_ID, APPV_USER_ID, APPV_TYPE, APPV_TTL, APPV_CN
         , APPV_STUS, APPV_STEP, DEL_YN, UPD_ID, UPD_DATE, REG_ID, REG_DATE)
-    VALUES 
-        (#{appvId}, #{appvUserId}, #{appvType}, #{appvTtl}, #{appvCn}
+    VALUES
+        (DBMS_RANDOM.STRING('A',10), #{appvUserId}, #{appvType}, #{appvTtl}, #{appvCn}
         , #{appvStus}, #{appvStep}, #{delYn}, #{updId}, SYSDATE, #{regId}
         , (SELECT REG_DATE FROM	TP_USER_INFO WHERE REG_ID = #{regId}))
- </insert>
+</insert>
+
+<!-- 메일 수신자 조회 -->
+<select id="getAddress" parameterType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto" resultType="kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto">
+    SELECT EMAIL FROM TP_USER_INFO WHERE USER_ID = #{appvUserId}
+</select>
+
 </mapper>

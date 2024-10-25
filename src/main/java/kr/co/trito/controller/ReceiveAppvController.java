@@ -12,8 +12,10 @@ import kr.co.trito.domain.response.TritoResponse;
 import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto;
 import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListParamDto;
 import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvUserListDto;
+import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveMailDto;
 import kr.co.trito.service.ReceiveAppvService;
 import lombok.AllArgsConstructor;
+
 
 
 @RestController
@@ -54,6 +56,24 @@ public class ReceiveAppvController {
         @Valid @RequestBody ReceiveAppvListDto receiveAppvListDto
     ) {
         return ResponseEntity.ok(new TritoResponse<>(receiveAppvService.addApproval(receiveAppvListDto)));
+    }
+
+    // 수신자 메일 조회
+    @PostMapping("/mailAddress")
+    public ResponseEntity<TritoResponse<?>> getAddress(
+        @Valid @RequestBody ReceiveAppvListDto receiveAppvListDto
+    ) {
+        return ResponseEntity.ok(new TritoResponse<>(receiveAppvService.getAddress(receiveAppvListDto)));
+    }
+
+    // 메일 발송
+    @PostMapping("/sendMail")
+    public ResponseEntity<TritoResponse<?>> sendMail(
+        @Valid @RequestBody ReceiveMailDto receiveMailDto
+    ) {
+        System.out.println("receiveMailDto ===>"+receiveMailDto);
+        receiveAppvService.sendMail(receiveMailDto);
+        return null;
     }
     
 }

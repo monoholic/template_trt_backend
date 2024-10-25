@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListDto;
 import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvListParamDto;
 import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvParamDto;
 import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveAppvUserListDto;
+import kr.co.trito.dto.Mybatis.receiveAppv.ReceiveMailDto;
 import kr.co.trito.utils.SearchCondition;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +26,8 @@ public class ReceiveAppvService {
 
     @Autowired
     private final ReceiveAppvRepository receiveAppvRepository;
+    private JavaMailSender mailSender;
+    private static final String FROM_ADDRESS = "hardnokk@gmail.com";
 
     public Object getReceiveAppvList(ReceiveAppvListParamDto receiveAppvListParamDto) {
 
@@ -62,5 +67,23 @@ public class ReceiveAppvService {
         res = receiveAppvRepository.addApproval(receiveAppvListDto);
         
         return res;
+    }
+
+    public List<ReceiveAppvListDto> getAddress(ReceiveAppvListDto receiveAppvListDto) {
+        List<ReceiveAppvListDto> address = receiveAppvRepository.getAddress(receiveAppvListDto);
+        return address;
+    }
+
+    public void sendMail(ReceiveMailDto receiveMailDto) {
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(receiveMailDto.getAddress());
+        message.setFrom(ReceiveAppvService.FROM_ADDRESS);
+        message.setSubject(receiveMailDto.getTitle());
+        message.setText(receiveMailDto.getContent());
+
+        System.out.println("message ===>"+message);
+
+        mailSender.send(message);
     }
 }

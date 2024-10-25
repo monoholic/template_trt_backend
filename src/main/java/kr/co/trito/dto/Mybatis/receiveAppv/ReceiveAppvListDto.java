@@ -7,6 +7,7 @@ public class ReceiveAppvListDto {
     public String rn;
     public String appvId;
     public String appvUserId;
+    public String email;
     public String appvUserNm;
     public String appvType;
     public String appvTtl;

@@ -19,6 +19,8 @@ public interface ReceiveAppvRepository {
     List<ReceiveAppvListDto> getTypeList();
 
     List<ReceiveAppvUserListDto> getUserList();
-
+    
     int addApproval(ReceiveAppvListDto receiveAppvListDto);
+
+    List<ReceiveAppvListDto> getAddress(ReceiveAppvListDto receiveAppvListDto);
 }
