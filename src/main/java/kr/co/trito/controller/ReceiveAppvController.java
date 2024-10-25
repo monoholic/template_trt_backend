@@ -71,7 +71,6 @@ public class ReceiveAppvController {
     public ResponseEntity<TritoResponse<?>> sendMail(
         @Valid @RequestBody ReceiveMailDto receiveMailDto
     ) {
-        System.out.println("receiveMailDto ===>"+receiveMailDto);
         receiveAppvService.sendMail(receiveMailDto);
         return null;
     }

@@ -26,7 +26,7 @@ public class ReceiveAppvService {
 
     @Autowired
     private final ReceiveAppvRepository receiveAppvRepository;
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
     private static final String FROM_ADDRESS = "hardnokk@gmail.com";
 
     public Object getReceiveAppvList(ReceiveAppvListParamDto receiveAppvListParamDto) {

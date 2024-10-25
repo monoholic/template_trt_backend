@@ -12,8 +12,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: hardnokk
-    password: trito!23
+    username: emptiness4all@gmail.com #test용 mail
+    password: edlw zwov iiwp dhua
     properties:
       mail:
         smtp:
