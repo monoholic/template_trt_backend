@@ -27,6 +27,9 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation "org.springframework.boot:spring-boot-starter-validation"
 
+    implementation group: 'com.oracle.ojdbc', name: 'orai18n', version: '19.3.0.0'
+
+
     // h2
     runtimeOnly 'com.h2database:h2'
 
